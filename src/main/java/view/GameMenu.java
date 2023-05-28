@@ -30,12 +30,15 @@ import java.net.URL;
 public class GameMenu extends Application {
     public static GameController gameController ;
     public static final int mainCircleRadius = 40;
-    public static final int invisibleCircleRadius = 40;
+    public static final int invisibleCircleRadius = 150;
 
     public static final int ballRadius = 16;
     public static Stage stage;
     public static String username;
     public static int numberOfBalls = 8;
+    public static Circle mainCircle = new Circle(400, 300, mainCircleRadius);
+
+    public static Circle invisibleCircle = new Circle(400, 300, invisibleCircleRadius);
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -44,10 +47,12 @@ public class GameMenu extends Application {
         AnchorPane gamePane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/gameMenu.fxml").toExternalForm()));
 
-        Circle mainCircle = new Circle(400, 300, mainCircleRadius);
+//        Circle mainCircle = new Circle(400, 300, mainCircleRadius);
+        mainCircle = new Circle(400, 300, mainCircleRadius);
         gamePane.getChildren().add(mainCircle);
 
-        Circle invisibleCircle = new Circle(400, 300, invisibleCircleRadius);
+//        Circle invisibleCircle = new Circle(400, 300, invisibleCircleRadius);
+        invisibleCircle = new Circle(400, 300, invisibleCircleRadius);
         invisibleCircle.setVisible(false);
         gamePane.getChildren().add(invisibleCircle);
 
@@ -88,7 +93,6 @@ public class GameMenu extends Application {
     private void shootBall(AnchorPane gamePane, double X, double Y, int radius) {
         Ball shootedball = new Ball(radius, X, Y, numberOfBalls);
         gamePane.getChildren().addAll(shootedball, shootedball.getBallText());
-        gameController.addConnectedBall(shootedball);
         ShootAnimation shootAnimation = new ShootAnimation(gamePane, shootedball);
         gameController.addAllAnimation(shootAnimation);
         shootAnimation.play();

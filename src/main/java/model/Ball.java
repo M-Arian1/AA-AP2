@@ -13,7 +13,7 @@ public class Ball extends Circle {
     public int radius;
     private int number;
     private Text text = null;
-    public Stick stick = null;
+    private Stick stick = null;
 
     private ShootAnimation shootAnimation = null;
 
@@ -27,13 +27,17 @@ public class Ball extends Circle {
         text.prefHeight(radius * 2);
         text.setTextAlignment(TextAlignment.CENTER);
 
+        stick = new Stick((int) X, (int) Y, 400, 300);
+        stick.setFill(Color.BLACK);
     }
 
 
     public Text getBallText() {
         return text;
     }
-
+    public Stick getBallStick() {
+        return stick;
+    }
     public void nextBall(){
 
         this.number--;

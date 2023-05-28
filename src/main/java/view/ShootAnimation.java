@@ -14,6 +14,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import model.Ball;
+import model.Game;
 
 import java.util.ArrayList;
 
@@ -33,12 +34,12 @@ public class ShootAnimation extends Transition {
 
     @Override
     protected void interpolate(double v) {
-        System.out.println("YOOOOOO");
+
         if(checkCollision(Anchorpane,ball)) {
-            ball.setCenterY(ball.getCenterY() - 1);
-            ball.getBallText().setLayoutY(ball.getBallText().getLayoutY() - 1);
+            ball.setCenterY(ball.getCenterY() - 5);
+            ball.getBallText().setY(ball.getBallText().getY() - 5);
         }else{
-            //TODO: give ball rotation
+            this.stop();
         }
     }
 
@@ -46,26 +47,34 @@ public class ShootAnimation extends Transition {
         Boolean isLost = false;
         ArrayList<Ball> balls = GameMenu.gameController.getConnectedBalls();
         for (Ball ball1 : balls) {
-            if (ball.getBoundsInParent().intersects(ball1.getBoundsInParent())) {
-                isLost = true;
-                break;
+//            if (ball.getBoundsInParent().intersects(ball1.getBoundsInParent())) {
+            if(!ball.equals(ball1)) {
+                if (Math.pow(ball.getCenterX() - ball1.getCenterX(), 2) + Math.pow(ball.getCenterY() - ball1.getCenterY(), 2) < Math.pow(32, 2)) {
+                    isLost = true;
+                    break;
+                }
             }
         }
-        System.out.println(isLost);
-//        if (isLost) {
-//            for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
-//                allAnimation.stop();
-//            }
-//            return false;
-//            //TODO: show lost page
-//        }else{
-//            if(Math.pow(ball.getCenterY()-300,2) + Math.pow(ball.getCenterY()-300,2) < Math.pow(GameMenu.invisibleCircleRadius,2)) {
-//                GameMenu.gameController.removeConnectedBall(ball);
-//                GameMenu.gameController.removeAllAnimation(this);
-//                this.stop();
-//                return false;
-//            }
-//        }
+
+        if (isLost) {
+            for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
+                allAnimation.stop();
+            }
+            return false;
+            //TODO: show lost page
+        }else{
+            if(Math.pow(ball.getCenterY()-300,2) + Math.pow(ball.getCenterX()-400,2) < Math.pow(GameMenu.invisibleCircleRadius,2)) {
+                this.stop();
+                GameMenu.gameController.addConnectedBall(ball);
+                gamePane.getChildren().add(ball.getBallStick());
+                GameMenu.gameController.removeAllAnimation(this);
+
+                RotationAnimation2 rotationAnimation = new RotationAnimation2(gamePane, ball, GameMenu.invisibleCircle);
+                GameMenu.gameController.addAllAnimation(rotationAnimation);
+                rotationAnimation.play();
+                return false;
+            }
+        }
         return true;
     }
 }
