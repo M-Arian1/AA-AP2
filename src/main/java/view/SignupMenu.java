@@ -1,14 +1,13 @@
 package view;
 
+import controller.AvatarFilesController;
 import controller.FilesController;
 import controller.GameController;
 import controller.RegisterController;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -38,7 +37,7 @@ public class SignupMenu extends Application{
     public TextField username;
     public PasswordField password;
     public ScrollPane scrollPane;
-    public String avatarText = " ";
+    private static String avatarText="";
 
 
 
@@ -54,18 +53,50 @@ public class SignupMenu extends Application{
 
 
         HBox avatarPane = new HBox();
-        for(int i=1; i<=10; i++){
-//            avatarPane.getChildren().add(new ImageView(new Image(Game.class.getResource("/images/avatars/p"+i+".png").toString(), 100, 100, false, false)));
-            avatarPane.getChildren().add(new Avatar("p"+i+".png"));
+        for (Avatar avatar : AvatarFilesController.avatarHandler()) {
+            avatar.setOnMouseClicked(new EventHandler<>(){
+                @Override
+                public void handle(MouseEvent event) {
+                    avatarText = avatar.getAvatarName();
+                    avatar.setRadius(70);
+                    avatarPane.getChildren().forEach(node -> {
+                        if(!node.equals(avatar)){
+                            ((Avatar)node).setRadius(50);
+                        }
+                    });
+                }
+            });
+            avatarPane.getChildren().add(avatar);
         }
-
+        avatarPane.setSpacing(10);
         scrollPane = new ScrollPane();
         scrollPane.setContent(avatarPane);
-        scrollPane.setLayoutX(347.0);
+        scrollPane.setLayoutX(300.0);
         scrollPane.setLayoutY(117.0);
-        scrollPane.setPrefHeight(50);
-        scrollPane.setPrefWidth(200.0);
+        scrollPane.setPrefHeight(170);
+        scrollPane.setPrefWidth(400.0);
+
+        Button RandomAvatarButton = new Button("Random Avatar");
+        RandomAvatarButton.setLayoutX(300.0);
+        RandomAvatarButton.setLayoutY(300.0);
+        RandomAvatarButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                avatarText = AvatarFilesController.getRandomAvatar().getAvatarName();
+                avatarPane.getChildren().forEach(node -> {
+                    if(((Avatar)node).getAvatarName().equals(avatarText)){
+                        ((Avatar)node).setRadius(70);
+                    }
+                    else{
+                        ((Avatar)node).setRadius(50);
+                    }
+                });
+            }
+        });
         signupPane.getChildren().add(scrollPane);
+        signupPane.getChildren().add(RandomAvatarButton);
+
+
 
         Scene scene = new Scene(signupPane);
         stage.setScene(scene);
@@ -86,6 +117,7 @@ public class SignupMenu extends Application{
         if(RegisterController.checkSignup(username.getText(), password.getText(), avatarText).equals("ok")){
             FilesController.addUserByString(username.getText(), password.getText(), avatarText);
             MainMenu.gameController = new GameController(username.getText());
+            MainMenu.username = username.getText();
             new MainMenu().start(SignupMenu.stage);
         }
         else{
@@ -99,6 +131,7 @@ public class SignupMenu extends Application{
 
     public void checkGuest(MouseEvent mouseEvent) throws Exception {
         MainMenu.gameController = new GameController("guest");
+        MainMenu.username = "guest";
         new MainMenu().start(SignupMenu.stage);
     }
 }

@@ -53,6 +53,7 @@ public class LoginMenu extends Application{
 
         if(RegisterController.checkLogin(username.getText(), password.getText()).equals("ok")){
             MainMenu.gameController = new GameController(username.getText());
+            MainMenu.username = username.getText();
             new MainMenu().start(LoginMenu.stage);
         }
         else{
@@ -66,24 +67,8 @@ public class LoginMenu extends Application{
 
     public void checkGuest(MouseEvent mouseEvent) throws Exception {
         MainMenu.gameController = new GameController("guest");
+        MainMenu.username = "guest";
         new MainMenu().start(LoginMenu.stage);
     }
 
-    public void checkNewGame(MouseEvent mouseEvent) {
-    }
-
-    public void checkLoadGame(MouseEvent mouseEvent) {
-    }
-
-    public void checkProfile(MouseEvent mouseEvent) {
-    }
-
-    public void checkHighScores(MouseEvent mouseEvent) {
-    }
-
-    public void checkSettings(MouseEvent mouseEvent) {
-    }
-
-    public void checkExit(MouseEvent mouseEvent) {
-    }
 }
