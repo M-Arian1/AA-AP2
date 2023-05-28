@@ -1,5 +1,6 @@
 package view;
 
+import controller.FilesController;
 import controller.GameController;
 import controller.RegisterController;
 import javafx.fxml.FXMLLoader;
@@ -54,6 +55,7 @@ public class LoginMenu extends Application{
         if(RegisterController.checkLogin(username.getText(), password.getText()).equals("ok")){
             MainMenu.gameController = new GameController(username.getText());
             MainMenu.username = username.getText();
+            FilesController.setCurrentUser(FilesController.getUserByUsername(username.getText()));
             new MainMenu().start(LoginMenu.stage);
         }
         else{
@@ -68,6 +70,7 @@ public class LoginMenu extends Application{
     public void checkGuest(MouseEvent mouseEvent) throws Exception {
         MainMenu.gameController = new GameController("guest");
         MainMenu.username = "guest";
+        FilesController.setCurrentUser(FilesController.getUserByUsername(username.getText()));
         new MainMenu().start(LoginMenu.stage);
     }
 

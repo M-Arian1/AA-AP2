@@ -135,6 +135,7 @@ public class ChangeProfileMenu extends Application {
     public void checkDeleteAccount(MouseEvent mouseEvent) throws Exception {
         if(RegisterController.checkDeleteAccount(username.getText(), password.getText(),confirmDelete.getText()).equals("ok")) {
             FilesController.deleteUser(FilesController.getUserByUsername(username.getText()));
+            FilesController.setCurrentUser(null);
             new LoginMenu().start(ChangeProfileMenu.stage);
 
         }
@@ -151,6 +152,7 @@ public class ChangeProfileMenu extends Application {
     }
 
     public void gotoLogin(MouseEvent mouseEvent) throws Exception {
+        FilesController.setCurrentUser(null);
         new LoginMenu().start(stage);
     }
 }

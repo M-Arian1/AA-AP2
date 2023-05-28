@@ -1,12 +1,24 @@
 package model;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class User {
     private String username;
     private String password;
     private String avatarText;
 
-    private int score;
+    private HashMap<Level,Integer> scores = new HashMap<>(){{
+        put(Level.EASY,0); //easy
+        put(Level.MEDIUM,0); //medium
+        put(Level.HARD,0); //hard
+    }};
+    private HashMap<Level,Integer> times = new HashMap<>(){{
+        put(Level.EASY,0); //easy
+        put(Level.MEDIUM,0); //medium
+        put(Level.HARD,0); //hard
+    }};
 
 
 
@@ -14,6 +26,12 @@ public class User {
         this.username = username;
         this.password = password;
         this.avatarText = avatarText;
+        this.scores.put(Level.EASY,0);
+        this.scores.put(Level.MEDIUM,0);
+        this.scores.put(Level.HARD,0);
+        this.times.put(Level.EASY,0);
+        this.times.put(Level.MEDIUM,0);
+        this.times.put(Level.HARD,0);
     }
 
 
@@ -33,12 +51,31 @@ public class User {
         this.password = password;
     }
 
-    public int getScore() {
-        return score;
+    public int getScore(Level level) {
+        if(this.scores == null) {
+            return 0;
+        }
+        return this.scores.get(level);
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setScore(Level level,int score) {
+        if(this.scores == null) {
+            this.scores = new HashMap<>();
+        }
+        this.scores.put(level,score);
+    }
+    public int getTime(Level level) {
+        if(this.times == null) {
+            return 0;
+        }
+        return this.times.get(level);
+    }
+
+    public void setTime(Level level,int time) {
+        if(this.times == null) {
+            this.times = new HashMap<>();
+        }
+        this.times.put(level,time);
     }
 
     public String getAvatar() {

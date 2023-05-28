@@ -118,6 +118,7 @@ public class SignupMenu extends Application{
             FilesController.addUserByString(username.getText(), password.getText(), avatarText);
             MainMenu.gameController = new GameController(username.getText());
             MainMenu.username = username.getText();
+            FilesController.setCurrentUser(FilesController.getUserByUsername(username.getText()));
             new MainMenu().start(SignupMenu.stage);
         }
         else{
@@ -132,6 +133,7 @@ public class SignupMenu extends Application{
     public void checkGuest(MouseEvent mouseEvent) throws Exception {
         MainMenu.gameController = new GameController("guest");
         MainMenu.username = "guest";
+        FilesController.setCurrentUser(FilesController.getUserByUsername(username.getText()));
         new MainMenu().start(SignupMenu.stage);
     }
 }

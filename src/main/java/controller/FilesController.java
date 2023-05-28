@@ -37,6 +37,14 @@ public class FilesController {
         }.getType()));
         fileWriter.close();
     }
+    public static void rewriteUsers(ArrayList<User> users) throws IOException {
+        File usersFile = new File("Users.json");
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter(usersFile);
+        fileWriter.write(gson.toJson(users, new TypeToken<ArrayList<User>>() {
+        }.getType()));
+        fileWriter.close();
+    }
     public static void deleteUser(User user) throws IOException {
         ArrayList<User> users = new ArrayList<User>();
         users = FilesController.getUsers();

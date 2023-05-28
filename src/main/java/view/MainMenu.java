@@ -52,7 +52,9 @@ public class MainMenu extends Application {
     }
 
 
-    public void checkNewGame(MouseEvent mouseEvent) {
+    public void checkNewGame(MouseEvent mouseEvent) throws Exception {
+        GameMenu.username = username;
+        new GameMenu().start(stage);
     }
 
     public void checkLoadGame(MouseEvent mouseEvent) {
@@ -61,13 +63,16 @@ public class MainMenu extends Application {
     public void checkProfile(MouseEvent mouseEvent) throws Exception {
         new ChangeProfileMenu().start(MainMenu.stage);
     }
-    public void checkHighScores(MouseEvent mouseEvent) {
+    public void checkHighScores(MouseEvent mouseEvent) throws Exception {
+        new HighScore().start(stage);
     }
 
     public void checkSettings(MouseEvent mouseEvent) {
+        //TODO
     }
 
     public void checkExit(MouseEvent mouseEvent) {
+        stage.close();
     }
 
 }

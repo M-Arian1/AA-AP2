@@ -23,19 +23,29 @@ import javafx.application.Application;
 import java.net.URL;
 
 
-public class Runn{
+public class Runn extends Application{
 
-
+    public static Stage stage;
 
     public static void main(String[] args) throws Exception {
-        if(FilesController.getCurrentUser()!=null){
-            MainMenu.gameController = new GameController(FilesController.getCurrentUser());
-            MainMenu.username = FilesController.getCurrentUser();
-            new MainMenu().start(MainMenu.stage);
-        }else{
-            new LoginMenu().start(LoginMenu.stage);
-        }
+        launch();
     }
 
 
+    @Override
+    public void start(Stage stage) throws Exception {
+        Runn.stage = stage;
+        AnchorPane runnpane = FXMLLoader.load(
+                new URL(MainMenu.class.getResource("/fxml/loginMenu.fxml").toExternalForm()));
+        Scene scene = new Scene(runnpane);
+        stage.setScene(scene);
+        stage.show();
+        if(FilesController.getCurrentUser()!=null){
+            MainMenu.gameController = new GameController(FilesController.getCurrentUser());
+            MainMenu.username = FilesController.getCurrentUser();
+            new MainMenu().start(Runn.stage);
+        }else{
+            new LoginMenu().start(Runn.stage);
+        }
+    }
 }
