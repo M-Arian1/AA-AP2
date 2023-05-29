@@ -62,6 +62,7 @@ public class ShootAnimation extends Transition {
             }
             return false;
             //TODO: show lost page
+            //please dont f up
         }else{
             if(Math.pow(ball.getCenterY()-300,2) + Math.pow(ball.getCenterX()-400,2) < Math.pow(GameMenu.invisibleCircleRadius,2)) {
                 this.stop();
