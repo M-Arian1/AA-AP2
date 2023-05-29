@@ -41,6 +41,7 @@ public class GameMenu extends Application {
     public static int numberOfBalls = 80;
     public static int iceModeCount = 0;
     public static double angleSpeedInput = 1;
+    public static double shootingAngle = Math.PI/2;
     public static Circle mainCircle = new Circle(400, 300, mainCircleRadius);
 
     public static Circle invisibleCircle = new Circle(400, 300, invisibleCircleRadius);
@@ -73,7 +74,7 @@ public class GameMenu extends Application {
     }
 
     private Ball createBall(AnchorPane gamePane) {
-        Ball ball = new Ball(ballRadius, 400, 500, numberOfBalls);
+        Ball ball = new Ball(ballRadius, 400, 500, numberOfBalls, shootingAngle);
 
         gamePane.getChildren().addAll(ball, ball.getBallText());
 
@@ -91,6 +92,12 @@ public class GameMenu extends Application {
                     iceModeTimeline(gamePane);
 
                 } else if (keyName.equals("Left")){
+                    GameMenu.gameController.addSetOfDefaultConnectedBalls(GameMenu.gameController.getConnectedBalls());
+                    try {
+                        FilesController.addDefaultSetOfBalls(GameMenu.gameController.getConnectedBalls());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
                 }else if (keyName.equals("Right")) {
 
@@ -129,7 +136,7 @@ public class GameMenu extends Application {
     }
 
     private void shootBall(AnchorPane gamePane, double X, double Y, int radius) {
-        Ball shootedball = new Ball(radius, X, Y, numberOfBalls);
+        Ball shootedball = new Ball(radius, X, Y, numberOfBalls, shootingAngle);
         gamePane.getChildren().addAll(shootedball, shootedball.getBallText());
         ShootAnimation shootAnimation = new ShootAnimation(gamePane, shootedball);
         gameController.addAllAnimation(shootAnimation);

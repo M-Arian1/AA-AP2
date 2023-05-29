@@ -2,10 +2,10 @@ package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import model.DataBase;
-import model.User;
+import model.*;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class FilesController {
@@ -156,4 +156,184 @@ public class FilesController {
             return null;
         }
     }
+
+    public static ArrayList<ArrayList<Ball>> getAllDefaultBalls() throws IOException {
+        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+        File ballsFile = new File("Balls.json");
+        if (ballsFile.exists()) {
+            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+            ballsSet = new Gson().fromJson(fileReader, new TypeToken<ArrayList<Ball>>() {
+            }.getType());
+            fileReader.close();
+        } else {
+            ballsSet = new ArrayList<ArrayList<Ball>>();
+            FileWriter fileWriter = new FileWriter(ballsFile);
+            fileWriter.close();
+        }
+        return ballsSet;
+    }
+    public static ArrayList<Ball> getDefaultBalls(int mapNumber) throws IOException {
+        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+        File ballsFile = new File("Balls.json");
+        if (ballsFile.exists()) {
+            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+            ballsSet = new Gson().fromJson(fileReader, new TypeToken<ArrayList<Ball>>() {
+            }.getType());
+            fileReader.close();
+        } else {
+            ballsSet = new ArrayList<ArrayList<Ball>>();
+            FileWriter fileWriter = new FileWriter(ballsFile);
+            fileWriter.close();
+        }
+        return ballsSet.get(mapNumber);
+    }
+    public static void addDefaultBall(Ball ball, int mapNumber) throws IOException {
+        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+        ballsSet = FilesController.getAllDefaultBalls();
+        if(ballsSet== null) ballsSet = new ArrayList<ArrayList<Ball>>();
+        ballsSet.get(mapNumber).add(ball);
+        File ballsFile = new File("Balls.json");
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter(ballsFile);
+        fileWriter.write(gson.toJson(ballsSet, new TypeToken<ArrayList<Ball>>() {
+        }.getType()));
+        fileWriter.close();
+    }
+    public static void addDefaultSetOfBalls(ArrayList <Ball> balls) throws IOException {
+        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+        ballsSet = FilesController.getAllDefaultBalls();
+        if(ballsSet== null) ballsSet = new ArrayList<ArrayList<Ball>>();
+        ballsSet.add(balls);
+        File ballsFile = new File("Balls.json");
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter(ballsFile);
+        fileWriter.write(gson.toJson(ballsSet, new TypeToken<ArrayList<Ball>>() {
+        }.getType()));
+        fileWriter.close();
+
+    }
+    //    public static ArrayList<ArrayList<Ball>> getAllDefaultBalls() throws IOException {
+//        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+//        File ballsFile = new File("Balls.json");
+//        if (ballsFile.exists()) {
+//            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+//            ballsSet = new Gson().fromJson(fileReader, new TypeToken<ArrayList<User>>() {
+//            }.getType());
+//            fileReader.close();
+//        } else {
+//            ballsSet = new ArrayList<ArrayList<Ball>>();
+//            FileWriter fileWriter = new FileWriter(ballsFile);
+//            fileWriter.close();
+//        }
+//        return ballsSet;
+//    }
+//    public static ArrayList<Ball> getDefaultBalls(int mapNumber) throws IOException {
+//        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+//        File ballsFile = new File("Balls.json");
+//        if (ballsFile.exists()) {
+//            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+//            ballsSet = new Gson().fromJson(fileReader, new TypeToken<ArrayList<User>>() {
+//            }.getType());
+//            fileReader.close();
+//        } else {
+//            ballsSet = new ArrayList<ArrayList<Ball>>();
+//            FileWriter fileWriter = new FileWriter(ballsFile);
+//            fileWriter.close();
+//        }
+//        return ballsSet.get(mapNumber);
+//    }
+//    public static void addDefaultBall(Ball ball, int mapNumber) throws IOException {
+//        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+//        ballsSet = FilesController.getAllDefaultBalls();
+//        if(ballsSet== null) ballsSet = new ArrayList<ArrayList<Ball>>();
+//        ballsSet.get(mapNumber).add(ball);
+//        File ballsFile = new File("Balls.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(ballsFile);
+//        fileWriter.write(gson.toJson(ballsSet, new TypeToken<ArrayList<Ball>>() {
+//        }.getType()));
+//        fileWriter.close();
+//    }
+//    public static void addDefaultSetOfBalls(ArrayList <Ball> balls) throws IOException {
+//        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+//        ballsSet = FilesController.getAllDefaultBalls();
+//        if(ballsSet== null) ballsSet = new ArrayList<ArrayList<Ball>>();
+//        ballsSet.add(balls);
+//        File ballsFile = new File("Balls.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(ballsFile);
+//        fileWriter.write(gson.toJson(ballsSet, new TypeToken<ArrayList<Ball>>() {
+//        }.getType()));
+//        fileWriter.close();
+//
+//    }
+
+
+//    public static ArrayList<ArrayList<Ball>> getAllDefaultBalls() throws IOException {
+//        ArrayList<ArrayList<SaveableBall>> ballsSet = new ArrayList<ArrayList<SaveableBall>>();
+//        File ballsFile = new File("Balls.json");
+//        if (ballsFile.exists()) {
+//            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+//            ballsSet = new Gson().fromJson(fileReader, new TypeToken<ArrayList<User>>() {
+//            }.getType());
+//            fileReader.close();
+//        } else {
+//            ballsSet = new ArrayList<ArrayList<SaveableBall>>();
+//            FileWriter fileWriter = new FileWriter(ballsFile);
+//            fileWriter.close();
+//        }
+//        ArrayList<ArrayList<Ball>> ConvertBallsSet = new ArrayList<ArrayList<Ball>>();
+//        for (ArrayList<SaveableBall> saveableBalls : ballsSet) {
+//            ArrayList<Ball> balls = new ArrayList<Ball>();
+//            for (SaveableBall saveableBall : saveableBalls) {
+//                balls.add(ConvertBall.ConvertSavableBallToBall(saveableBall));
+//            }
+//            ConvertBallsSet.add(balls);
+//        }
+//        return ConvertBallsSet;
+//    }
+//    public static ArrayList<Ball> getDefaultBalls(int mapNumber) throws IOException {
+//        ArrayList<ArrayList<SaveableBall>> ballsSet = new ArrayList<ArrayList<SaveableBall>>();
+//        File ballsFile = new File("Balls.json");
+//        if (ballsFile.exists()) {
+//            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+//            ballsSet = new Gson().fromJson(fileReader, new TypeToken<ArrayList<User>>() {
+//            }.getType());
+//            fileReader.close();
+//        } else {
+//            ballsSet = new ArrayList<ArrayList<SaveableBall>>();
+//            FileWriter fileWriter = new FileWriter(ballsFile);
+//            fileWriter.close();
+//        }
+//        ArrayList<Ball> balls = new ArrayList<Ball>();
+//        for (SaveableBall saveableBall : ballsSet.get(mapNumber)) {
+//            balls.add(ConvertBall.ConvertSavableBallToBall(saveableBall));
+//        }
+//        return balls;
+//    }
+//    public static void addDefaultBall(Ball ball, int mapNumber) throws IOException {
+//        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+//        ballsSet = FilesController.getAllDefaultBalls();
+//        if(ballsSet== null) ballsSet = new ArrayList<ArrayList<Ball>>();
+//        ballsSet.get(mapNumber).add(ball);
+//        File ballsFile = new File("Balls.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(ballsFile);
+//        fileWriter.write(gson.toJson(ballsSet, new TypeToken<ArrayList<Ball>>() {
+//        }.getType()));
+//        fileWriter.close();
+//    }
+//    public static void addDefaultSetOfBalls(ArrayList <Ball> balls) throws IOException {
+//        ArrayList<ArrayList<Ball>> ballsSet = new ArrayList<ArrayList<Ball>>();
+//        ballsSet = FilesController.getAllDefaultBalls();
+//        if(ballsSet== null) ballsSet = new ArrayList<ArrayList<Ball>>();
+//        ballsSet.add(balls);
+//        File ballsFile = new File("Balls.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(ballsFile);
+//        fileWriter.write(gson.toJson(ballsSet, new TypeToken<ArrayList<Ball>>() {
+//        }.getType()));
+//        fileWriter.close();
+//
+//    }
 }

@@ -45,6 +45,7 @@ public class RotationAnimation2 extends Transition {
         ball.getBallText().setY(ball.getCenterY()+4);
         ball.getBallStick().setStartX(ball.getCenterX());
         ball.getBallStick().setStartY(ball.getCenterY());
+        ball.angle = angle;
     }
 
     public double getAngleSpeed() {
