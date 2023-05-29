@@ -69,7 +69,7 @@ public class ShootAnimation extends Transition {
                 gamePane.getChildren().add(ball.getBallStick());
                 GameMenu.gameController.removeAllAnimation(this);
 
-                RotationAnimation2 rotationAnimation = new RotationAnimation2(gamePane, ball, GameMenu.invisibleCircle);
+                RotationAnimation2 rotationAnimation = new RotationAnimation2(gamePane, ball, GameMenu.invisibleCircle, GameMenu.angleSpeedInput);
                 GameMenu.gameController.addAllAnimation(rotationAnimation);
                 rotationAnimation.play();
                 return false;

@@ -24,12 +24,13 @@ public class RotationAnimation2 extends Transition {
     private Ball ball;
     private AnchorPane Anchorpane;
     private Circle invisibleCircle;
-
+    private double angleSpeed = 1;
     private double angle = Math.PI/2;
-    public RotationAnimation2(AnchorPane anchorPane, Ball ball, Circle invisibleCircle) {
+    public RotationAnimation2(AnchorPane anchorPane, Ball ball, Circle invisibleCircle, double angleSpeedInput) {
         this.ball = ball;
         this.Anchorpane = anchorPane;
         this.invisibleCircle = invisibleCircle;
+        this.angleSpeed = angleSpeedInput;
         this.setCycleDuration(Duration.millis(1));
         this.setCycleCount(-1);
     }
@@ -37,12 +38,20 @@ public class RotationAnimation2 extends Transition {
     @Override
     protected void interpolate(double v) {
         //rotate the ball with math.sin and math.cos
-        angle += 0.001;
+        angle += 0.001*angleSpeed;
         ball.setCenterX(invisibleCircle.getCenterX() + invisibleCircle.getRadius() * Math.cos(angle));
         ball.setCenterY(invisibleCircle.getCenterY() + invisibleCircle.getRadius() * Math.sin(angle));
         ball.getBallText().setX(ball.getCenterX()-16);
         ball.getBallText().setY(ball.getCenterY()+4);
         ball.getBallStick().setStartX(ball.getCenterX());
         ball.getBallStick().setStartY(ball.getCenterY());
+    }
+
+    public double getAngleSpeed() {
+        return angleSpeed;
+    }
+
+    public void setAngleSpeed(double angleSpeed) {
+        this.angleSpeed = angleSpeed;
     }
 }
