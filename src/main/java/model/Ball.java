@@ -11,13 +11,14 @@ import view.ShootAnimation;
 public class Ball extends Circle {
 
     public int radius;
-    private int number;
+    public int number;
     private Text text = null;
     private Stick stick = null;
 
     private ShootAnimation shootAnimation = null;
+    public double angle;
 
-    public Ball(int radius, double X, double Y, int number) {
+    public Ball(int radius, double X, double Y, int number, double angle) {
         super(X, Y, radius);
         this.setFill(Color.BLACK);
         this.number = number;
@@ -26,6 +27,7 @@ public class Ball extends Circle {
         text.setWrappingWidth(radius * 2);
         text.prefHeight(radius * 2);
         text.setTextAlignment(TextAlignment.CENTER);
+        this.angle = angle;
 
         stick = new Stick((int) X, (int) Y, 400, 300);
         stick.setFill(Color.BLACK);
