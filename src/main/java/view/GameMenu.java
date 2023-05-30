@@ -18,9 +18,12 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Ball;
+import model.Phase2;
+import model.Phase3;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class GameMenu extends Application {
     public static GameController gameController ;
@@ -33,6 +36,7 @@ public class GameMenu extends Application {
     public static String username;
     public static int numberOfBalls = SettingsController.getMaxNumberOfBalls();
     public static int iceModeCount = 0;
+    public int phase = 0;
     public static double angleSpeedInput = 1;
     public static Circle mainCircle = new Circle(400, 300, mainCircleRadius);
 
@@ -86,9 +90,7 @@ public class GameMenu extends Application {
                     iceModeTimeline(gamePane);
 
                 } else if (keyName.equals("Left")){
-                    for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
-                        connectedBall.radius = 40;
-                    }
+
 
                 }else if (keyName.equals("Right")) {
 
@@ -100,19 +102,42 @@ public class GameMenu extends Application {
 
     private void checkPhase(AnchorPane gamePane) {
         int maxNumberOfBalls = SettingsController.getMaxNumberOfBalls();
-        if (numberOfBalls <= maxNumberOfBalls && numberOfBalls > maxNumberOfBalls*3/4) {
+        if (numberOfBalls <= maxNumberOfBalls && numberOfBalls > maxNumberOfBalls*3/4 && phase!=1) {
+            phase = 1;
 
-        }else if(numberOfBalls <= maxNumberOfBalls*3/4 && numberOfBalls > maxNumberOfBalls/2) {
+        }else if(numberOfBalls <= maxNumberOfBalls*3/4 && numberOfBalls > maxNumberOfBalls/2 && phase!=2) {
 
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(300),
+                    actionEvent -> timelineForPhase2(gamePane)));
+            timeline.setCycleCount(1);
+            timeline.play();
 
-        }else if(numberOfBalls <= maxNumberOfBalls/2 && numberOfBalls > maxNumberOfBalls/4) {
+        }else if(numberOfBalls <= maxNumberOfBalls/2 && numberOfBalls > maxNumberOfBalls/4 && phase!=3) {
+            Phase3.timeHandlerChangeVisibility(gamePane);
 
-        }else if (numberOfBalls <= maxNumberOfBalls/4 && numberOfBalls > 0) {
+        }else if (numberOfBalls <= maxNumberOfBalls/4 && numberOfBalls > 0 && phase!=4) {
 
         }else if(numberOfBalls == 0) {
             //TODO
         }
     }
+
+    private void timelineForPhase2(AnchorPane gamePane) {
+        changeRotateSpeed(gamePane);
+        Phase2.timeLineHandlerChangeRotateSpeed(gamePane);
+        Phase2.timeHandlerChangeRadius(gamePane);
+    }
+
+    private void changeRotateSpeed(AnchorPane gamePane) {
+        for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
+            if (allAnimation instanceof RotationAnimation2) {
+                ((RotationAnimation2) allAnimation).setAngleSpeed(-((RotationAnimation2) allAnimation).getAngleSpeed());
+            }
+        }
+        angleSpeedInput = -angleSpeedInput;
+    }
+
+
 
     private void iceModeTimeline(AnchorPane gamePane) {
         if(iceModeCount < 5) return;
@@ -148,6 +173,23 @@ public class GameMenu extends Application {
         ShootAnimation shootAnimation = new ShootAnimation(gamePane, shootedball);
         gameController.addAllAnimation(shootAnimation);
         shootAnimation.play();
+    }
+
+    public static boolean checkCollision(AnchorPane gamePane) {
+        Boolean isLost = false;
+        ArrayList<Ball> balls = GameMenu.gameController.getConnectedBalls();
+        for(Ball ball1 : balls) {
+            for(Ball ball2 : balls){
+                if(!ball1.equals(ball2)) {
+                    if (Math.pow(ball1.getCenterX() - ball2.getCenterX(), 2) + Math.pow(ball1.getCenterY() - ball2.getCenterY(), 2) < Math.pow(2*ball1.getRadius(), 2)) {
+                        isLost = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return isLost;
+
     }
 
 

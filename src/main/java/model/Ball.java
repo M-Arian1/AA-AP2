@@ -10,7 +10,7 @@ import view.ShootAnimation;
 
 public class Ball extends Circle {
 
-    public int radius;
+
     private int number;
     private boolean isNumVisible = true;
     private Text text = null;

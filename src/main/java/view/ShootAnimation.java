@@ -57,6 +57,7 @@ public class ShootAnimation extends Transition {
             }
         }
 
+
         if (isLost) {
             for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
                 allAnimation.stop();

@@ -2,8 +2,8 @@ package controller;
 
 public class SettingsController {
     private static int mapNumber = 0;
-    private static int maxNumberOfBalls = 80;
-    private static int ballRadius = 3;
+    private static int maxNumberOfBalls = 10;
+    private static int ballRadius = 5;
     private static double iceModeNeededBalls = 5.0;
     public static int getMapNumber() {
         return mapNumber;
