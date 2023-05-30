@@ -1,6 +1,8 @@
 package controller;
 
 import javafx.animation.Animation;
+import javafx.animation.Timeline;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import model.Ball;
 import model.DataBase;
@@ -13,6 +15,7 @@ import java.util.Collection;
 public class GameController {
 
     private String username;
+    private AnchorPane gamePane;
     private ArrayList<Ball> connectedBalls = new ArrayList<>();
     private ArrayList<Animation> allAnimations = new ArrayList<>();
     public GameController(String username) {
@@ -95,6 +98,20 @@ public class GameController {
         this.allAnimations.remove(animation);
     }
 
+    public AnchorPane getGamePane() {
+        return gamePane;
+    }
+
+    public void setGamePane(AnchorPane gamePane) {
+        this.gamePane = gamePane;
+    }
 
 
+//    public ArrayList<Timeline> getAllTimeLines() {
+//        return allTimeLines;
+//    }
+//
+//    public void setAllTimeLines(ArrayList<Timeline> allTimeLines) {
+//        this.allTimeLines = allTimeLines;
+//    }
 }

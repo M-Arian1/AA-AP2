@@ -45,6 +45,7 @@ public class SettingsMenu extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        loadSettings();
         SettingsMenu.stage = stage;
         AnchorPane settings = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/settingsMenu.fxml").toExternalForm()));
@@ -133,5 +134,13 @@ public class SettingsMenu extends Application {
     public void checkLang(MouseEvent mouseEvent) {
         SettingsController.setPersian(!SettingsController.isPersian());
         langLabel.setText(SettingsController.isPersian()?"Persian":"English");
+    }
+
+    public void saveSettings(MouseEvent mouseEvent) throws IOException {
+        SettingsController settingController = new SettingsController();
+        FilesController.saveSettingController(settingController);
+    }
+    public void loadSettings() throws IOException {
+        FilesController.setSettingsController();
     }
 }

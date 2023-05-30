@@ -14,6 +14,7 @@ public class SettingsController {
     private static boolean isPersian = false;
     private static String shootButton = "Space";
     private static String iceButton = "Tab";
+
     public static int getMapNumber() {
         return mapNumber;
     }
@@ -116,5 +117,21 @@ public class SettingsController {
 
     public static void setIceButton(String iceButton) {
         SettingsController.iceButton = iceButton;
+    }
+
+    public static void setInstance(SettingsController settingController) {
+        SettingsController.mapNumber = settingController.mapNumber;
+        SettingsController.maxNumberOfBalls = settingController.maxNumberOfBalls;
+        SettingsController.ballRadius = settingController.ballRadius;
+        SettingsController.iceModeNeededBalls = settingController.iceModeNeededBalls;
+        SettingsController.angleSpeedInput = settingController.angleSpeedInput;
+        SettingsController.iceModeTimer = settingController.iceModeTimer;
+        SettingsController.windSpeedRate = settingController.windSpeedRate;
+        SettingsController.maxWindSpeed = settingController.maxWindSpeed;
+        SettingsController.isMuted = settingController.isMuted;
+        SettingsController.isBW = settingController.isBW;
+        SettingsController.isPersian = settingController.isPersian;
+        SettingsController.shootButton = settingController.shootButton;
+        SettingsController.iceButton = settingController.iceButton;
     }
 }

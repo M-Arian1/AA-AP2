@@ -15,6 +15,7 @@ public class Ball extends Circle {
     private boolean isNumVisible = true;
     private Text text = null;
     private Stick stick = null;
+    public boolean isPaused = false;
 
     private ShootAnimation shootAnimation = null;
 

@@ -4,7 +4,7 @@ module AP2{
     requires javafx.media;
     requires com.google.gson;
     opens model to com.google.gson;
-
+    opens controller to com.google.gson;
 
     exports view;
     opens view to javafx.fxml;

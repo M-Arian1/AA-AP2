@@ -189,6 +189,14 @@ public class FilesController {
         fileWriter.close();
 
     }
+    public static void saveSettingController(SettingsController settingController) throws IOException {
+        File usersFile = new File("src/main/resources/data/Settings.json");
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter(usersFile);
+        fileWriter.write(gson.toJson(settingController, new TypeToken<SettingsController>() {
+        }.getType()));
+        fileWriter.close();
+    }
     public static ArrayList<Double> getBalls() throws IOException {
         ArrayList<Double> balls = new ArrayList<>();
         File ballsFile = new File("src/main/resources/data/Balls/Balls.json");
@@ -248,6 +256,19 @@ public class FilesController {
             fileWriter.close();
         }
         return balls;
+    }
+    public static void setSettingsController() throws IOException {
+        File settingsFile = new File("src/main/resources/data/Settings.json");
+        if (settingsFile.exists()) {
+            BufferedReader fileReader = new BufferedReader(new FileReader(settingsFile));
+            SettingsController settingController = new Gson().fromJson(fileReader, new TypeToken<SettingsController>() {
+            }.getType());
+            fileReader.close();
+            SettingsController.setInstance(settingController);
+        } else {
+            SettingsController.setInstance(new SettingsController());
+        }
+
     }
 
 

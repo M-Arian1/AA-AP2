@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.animation.Animation;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import model.Ball;
@@ -60,13 +61,27 @@ public class NewGameController {
 
 
     public static void newGame(AnchorPane gamePane, int mapNumber) {
-        Circle invisibleCircle = new Circle(400, 300, GameMenu.invisibleCircleRadius);
+        Circle invisibleCircle = GameMenu.invisibleCircle;
         ArrayList<Double> map = mapList.get(mapNumber);
+        GameMenu.iceModeCount = 0;
+        GameMenu.numberOfBalls = SettingsController.getMaxNumberOfBalls();
+        GameMenu.windSpeed = 0;
+        GameMenu.windSpeedRate = SettingsController.getWindSpeedRate();
+        GameMenu.phase = 0;
+        GameMenu.angleSpeedInput = SettingsController.getAngleSpeedInput();
+        GameMenu.isBeingLoaded = false;
+
+
+        GameMenu.numberOfBalls = SettingsController.getMaxNumberOfBalls();
+        GameMenu.progressBar.setProgress(0);
 
         gamePane.getChildren().removeAll(GameMenu.gameController.getConnectedBalls());
         gamePane.getChildren().removeAll(GameMenu.gameController.getConnectedBallsTexts());
         gamePane.getChildren().removeAll(GameMenu.gameController.getConnectedBallsLines());
         GameMenu.gameController.setConnectedBallsbyAngle(map);
+        for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
+            allAnimation.stop();
+        }
         GameMenu.gameController.getAllAnimations().clear();
         gamePane.getChildren().addAll(GameMenu.gameController.getConnectedBalls());
         gamePane.getChildren().addAll(GameMenu.gameController.getConnectedBallsTexts());
@@ -85,6 +100,7 @@ public class NewGameController {
         GameMenu.progressBar.setProgress(GameMenu.iceModeCount / SettingsController.getIceModeNeededBalls());
         ArrayList<Double> map = FilesController.getBalls();
         ArrayList<Integer> ballsnumbers = FilesController.getBallsNumbers();
+
         gamePane.getChildren().removeAll(GameMenu.gameController.getConnectedBalls());
         gamePane.getChildren().removeAll(GameMenu.gameController.getConnectedBallsTexts());
         gamePane.getChildren().removeAll(GameMenu.gameController.getConnectedBallsLines());
