@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -20,6 +21,7 @@ import javafx.util.Duration;
 import model.Ball;
 import model.Phase2;
 import model.Phase3;
+import model.Phase4;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 public class GameMenu extends Application {
     public static GameController gameController ;
     public static ProgressBar progressBar;
+    public static Label label;
     public static final int mainCircleRadius = 40;
     public static final int invisibleCircleRadius = 150;
 
@@ -35,13 +38,15 @@ public class GameMenu extends Application {
     public static Stage stage;
     public static String username;
     public static int numberOfBalls = SettingsController.getMaxNumberOfBalls();
+    public static int windSpeed = 0;
+    public static double windSpeedRate = SettingsController.getWindSpeedRate();
     public static int iceModeCount = 0;
-    public int phase = 0;
-    public static double angleSpeedInput = 1;
+    public static int phase = 0;
+    public static double angleSpeedInput = SettingsController.getAngleSpeedInput();
     public static Circle mainCircle = new Circle(400, 300, mainCircleRadius);
 
     public static Circle invisibleCircle = new Circle(400, 300, invisibleCircleRadius);
-
+    public static boolean isBeingLoaded = false;
     @Override
     public void start(Stage stage) throws Exception {
         gameController = new GameController(username);
@@ -51,12 +56,18 @@ public class GameMenu extends Application {
         progressBar = new ProgressBar(0);
         progressBar.setLayoutX(100);
         progressBar.setLayoutY(100);
+        label = new Label();
+        label.setLayoutX(100);
+        label.setLayoutY(200);
+        label.setText("WindSpeed: "+windSpeed);
         NewGameController.newGame(gamePane, SettingsController.getMapNumber());
-//        Circle mainCircle = new Circle(400, 300, mainCircleRadius);
+        if(isBeingLoaded){
+            NewGameController.loadGame(gamePane);
+        }
         mainCircle = new Circle(400, 300, mainCircleRadius);
         gamePane.getChildren().add(mainCircle);
         gamePane.getChildren().add(progressBar);
-//        Circle invisibleCircle = new Circle(400, 300, invisibleCircleRadius);
+        gamePane.getChildren().add(label);
         invisibleCircle = new Circle(400, 300, invisibleCircleRadius);
         invisibleCircle.setVisible(false);
         gamePane.getChildren().add(invisibleCircle);
@@ -72,28 +83,40 @@ public class GameMenu extends Application {
 
     private Ball createBall(AnchorPane gamePane) {
         Ball ball = new Ball(ballRadius, 400, 500, numberOfBalls);
-
-        gamePane.getChildren().addAll(ball, ball.getBallText());
+        ball.getBallStick().setVisible(false);
+        gamePane.getChildren().addAll(ball, ball.getBallText(), ball.getBallStick());
 
         ball.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 String keyName = keyEvent.getCode().getName();
-                if (keyEvent.getCode().equals(KeyCode.SPACE)) {
+                if (keyName.equals(SettingsController.getShootButton())) {
                     ball.nextBall();
                     shootBall(gamePane, ball.getCenterX(), ball.getCenterY(), ballRadius);
                     numberOfBalls--;
                     checkPhase(gamePane);
                     iceModeCount++;
                     progressBar.setProgress(iceModeCount/SettingsController.getIceModeNeededBalls());
-                } else if (keyName.equals("Tab")) {
+                } else if (keyName.equals(SettingsController.getIceButton())) {
                     iceModeTimeline(gamePane);
 
                 } else if (keyName.equals("Left")){
-
+                    if(phase == 4 && ball.getCenterX() > 161){
+                        ball.setCenterX(ball.getCenterX() - 10);
+                        ball.getBallText().setX(ball.getBallText().getX() - 10);
+                    }
 
                 }else if (keyName.equals("Right")) {
-
+                    if(phase == 4 && ball.getCenterX() < 639){
+                        ball.setCenterX(ball.getCenterX() + 10);
+                        ball.getBallText().setX(ball.getBallText().getX() + 10);
+                    }
+                }else if(keyName.equals("S")) {
+                    try {
+                        NewGameController.saveGame();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
@@ -106,16 +129,19 @@ public class GameMenu extends Application {
             phase = 1;
 
         }else if(numberOfBalls <= maxNumberOfBalls*3/4 && numberOfBalls > maxNumberOfBalls/2 && phase!=2) {
-
+            phase = 2;
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(300),
                     actionEvent -> timelineForPhase2(gamePane)));
             timeline.setCycleCount(1);
             timeline.play();
 
         }else if(numberOfBalls <= maxNumberOfBalls/2 && numberOfBalls > maxNumberOfBalls/4 && phase!=3) {
+            phase = 3;
             Phase3.timeHandlerChangeVisibility(gamePane);
 
         }else if (numberOfBalls <= maxNumberOfBalls/4 && numberOfBalls > 0 && phase!=4) {
+            phase = 4;
+            Phase4.windEventHandler(gamePane);
 
         }else if(numberOfBalls == 0) {
             //TODO
@@ -144,7 +170,7 @@ public class GameMenu extends Application {
         iceModeCount = 0;
         progressBar.setProgress(0);
         iceMode(gamePane);
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(3000),
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000*SettingsController.getIceModeTimer()),
                 actionEvent -> revertIceMode(gamePane)));
         timeline.setCycleCount(1);
         timeline.play();
@@ -169,7 +195,8 @@ public class GameMenu extends Application {
 
     private void shootBall(AnchorPane gamePane, double X, double Y, int radius) {
         Ball shootedball = new Ball(radius, X, Y, numberOfBalls);
-        gamePane.getChildren().addAll(shootedball, shootedball.getBallText());
+        gamePane.getChildren().addAll(shootedball, shootedball.getBallText(), shootedball.getBallStick());
+        shootedball.getBallStick().setVisible(false);
         ShootAnimation shootAnimation = new ShootAnimation(gamePane, shootedball);
         gameController.addAllAnimation(shootAnimation);
         shootAnimation.play();

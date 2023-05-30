@@ -3,11 +3,13 @@ package controller;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import model.Ball;
+import model.Game;
 import view.GameMenu;
 import view.RotationAnimation2;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NewGameController {
     private static ArrayList<ArrayList<Double>> mapList = new ArrayList<>();
@@ -71,7 +73,7 @@ public class NewGameController {
         gamePane.getChildren().addAll(GameMenu.gameController.getConnectedBallsLines());
         for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
             connectedBall.setIsNumVisible(false);
-            RotationAnimation2 rotationAnimation2 = new RotationAnimation2(gamePane, connectedBall, invisibleCircle, 1, connectedBall.getAngle());
+            RotationAnimation2 rotationAnimation2 = new RotationAnimation2(gamePane, connectedBall, invisibleCircle, SettingsController.getAngleSpeedInput(), connectedBall.getAngle());
             rotationAnimation2.play();
             GameMenu.gameController.getAllAnimations().add(rotationAnimation2);
         }
@@ -79,6 +81,7 @@ public class NewGameController {
     public static void loadGame(AnchorPane gamePane) throws IOException {
         Circle invisibleCircle = new Circle(400, 300, GameMenu.invisibleCircleRadius);
         GameMenu.iceModeCount = FilesController.getBallsIce();
+        GameMenu.numberOfBalls = FilesController.getNumberOfBalls();
         GameMenu.progressBar.setProgress(GameMenu.iceModeCount / SettingsController.getIceModeNeededBalls());
         ArrayList<Double> map = FilesController.getBalls();
         ArrayList<Integer> ballsnumbers = FilesController.getBallsNumbers();
@@ -91,16 +94,17 @@ public class NewGameController {
         gamePane.getChildren().addAll(GameMenu.gameController.getConnectedBallsTexts());
         gamePane.getChildren().addAll(GameMenu.gameController.getConnectedBallsLines());
         for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
-            RotationAnimation2 rotationAnimation2 = new RotationAnimation2(gamePane, connectedBall, invisibleCircle, 1, connectedBall.getAngle());
+            RotationAnimation2 rotationAnimation2 = new RotationAnimation2(gamePane, connectedBall, invisibleCircle, SettingsController.getAngleSpeedInput(), connectedBall.getAngle());
             rotationAnimation2.play();
             GameMenu.gameController.getAllAnimations().add(rotationAnimation2);
         }
-        GameMenu.numberOfBalls = SettingsController.getMaxNumberOfBalls() - GameMenu.gameController.getConnectedBalls().size();
+
 
     }
     public static void saveGame() throws IOException {
         FilesController.saveBalls(GameMenu.gameController.getConnectedBallsAngles());
         FilesController.saveBallsNumbers(GameMenu.gameController.getConnectedBallsMapNumbers());
         FilesController.saveBallsIce(GameMenu.iceModeCount);
+        FilesController.saveNumberOfBalls(GameMenu.numberOfBalls);
     }
 }

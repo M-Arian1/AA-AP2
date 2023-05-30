@@ -37,8 +37,10 @@ public class ShootAnimation extends Transition {
     protected void interpolate(double v) {
 
         if(checkCollision(Anchorpane,ball)) {
-            ball.setCenterY(ball.getCenterY() - 5);
-            ball.getBallText().setY(ball.getBallText().getY() - 5);
+            ball.setCenterY(ball.getCenterY() - 5*Math.cos(Math.toRadians(GameMenu.windSpeed)));
+            ball.setCenterX(ball.getCenterX() + 5*Math.sin(Math.toRadians(GameMenu.windSpeed)));
+            ball.getBallText().setY(ball.getBallText().getY() - 5*Math.cos(Math.toRadians(GameMenu.windSpeed)));
+            ball.getBallText().setX(ball.getBallText().getX() + 5*Math.sin(Math.toRadians(GameMenu.windSpeed)));
         }else{
             this.stop();
         }
@@ -56,6 +58,11 @@ public class ShootAnimation extends Transition {
                 }
             }
         }
+        if(GameMenu.phase == 4){
+            if(ball.getCenterX() > 800 || ball.getCenterX() < 0 || ball.getCenterY() > 600 || ball.getCenterY() < 0){
+                isLost = true;
+            }
+        }
 
 
         if (isLost) {
@@ -65,15 +72,17 @@ public class ShootAnimation extends Transition {
             return false;
             //TODO: show lost page
             //please dont f up
-        }else{
+        }
+        else{
             if(Math.pow(ball.getCenterY()-300,2) + Math.pow(ball.getCenterX()-400,2) < Math.pow(GameMenu.invisibleCircleRadius,2)) {
                 this.stop();
                 GameMenu.gameController.addConnectedBall(ball);
-                gamePane.getChildren().add(ball.getBallStick());
+
                 GameMenu.gameController.removeAllAnimation(this);
 
-                RotationAnimation2 rotationAnimation = new RotationAnimation2(gamePane, ball, GameMenu.invisibleCircle, GameMenu.angleSpeedInput ,Math.PI/2);
+                RotationAnimation2 rotationAnimation = new RotationAnimation2(gamePane, ball, GameMenu.invisibleCircle, GameMenu.angleSpeedInput ,Math.atan2(ball.getCenterY() - GameMenu.invisibleCircle.getCenterY(), ball.getCenterX() - GameMenu.invisibleCircle.getCenterX()));
                 GameMenu.gameController.addAllAnimation(rotationAnimation);
+
                 rotationAnimation.play();
                 return false;
             }

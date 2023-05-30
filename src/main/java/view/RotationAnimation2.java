@@ -25,16 +25,25 @@ public class RotationAnimation2 extends Transition {
     private Ball ball;
     private AnchorPane Anchorpane;
     private Circle invisibleCircle;
-    private double angleSpeed = 1;
+    private double angleSpeed = SettingsController.getAngleSpeedInput();
     private double angle = Math.PI/2;
     public RotationAnimation2(AnchorPane anchorPane, Ball ball, Circle invisibleCircle, double angleSpeedInput, double angleInput) {
         this.ball = ball;
         this.Anchorpane = anchorPane;
         this.invisibleCircle = invisibleCircle;
+
         this.angleSpeed = angleSpeedInput;
         this.setCycleDuration(Duration.millis(1));
         this.setCycleCount(-1);
         this.angle = angleInput;
+
+        this.ball.setCenterX(invisibleCircle.getCenterX() + invisibleCircle.getRadius() * Math.cos(angle));
+        this.ball.setCenterY(invisibleCircle.getCenterY() + invisibleCircle.getRadius() * Math.sin(angle));
+        this.ball.getBallText().setX(ball.getCenterX()- SettingsController.getBallRadius());
+        this.ball.getBallText().setY(ball.getCenterY()+4);
+        this.ball.getBallStick().setStartX(ball.getCenterX());
+        this.ball.getBallStick().setStartY(ball.getCenterY());
+        this.ball.getBallStick().setVisible(true);
     }
 
     @Override

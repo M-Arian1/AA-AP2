@@ -34,6 +34,7 @@ public class Runn extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
+        //TODO : filechoose panel
         Runn.stage = stage;
         AnchorPane runnpane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/loginMenu.fxml").toExternalForm()));

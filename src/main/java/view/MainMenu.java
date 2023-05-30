@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Avatar;
+import model.Game;
 import model.User;
 
 import java.io.File;
@@ -54,10 +55,14 @@ public class MainMenu extends Application {
 
     public void checkNewGame(MouseEvent mouseEvent) throws Exception {
         GameMenu.username = username;
+        GameMenu.isBeingLoaded = false;
         new GameMenu().start(stage);
     }
 
-    public void checkLoadGame(MouseEvent mouseEvent) {
+    public void checkLoadGame(MouseEvent mouseEvent) throws Exception {
+        GameMenu.username = username;
+        GameMenu.isBeingLoaded = true;
+        new GameMenu().start(stage);
     }
 
     public void checkProfile(MouseEvent mouseEvent) throws Exception {
@@ -67,8 +72,8 @@ public class MainMenu extends Application {
         new HighScore().start(stage);
     }
 
-    public void checkSettings(MouseEvent mouseEvent) {
-        //TODO
+    public void checkSettings(MouseEvent mouseEvent) throws Exception {
+        new SettingsMenu().start(stage);
     }
 
     public void checkExit(MouseEvent mouseEvent) {

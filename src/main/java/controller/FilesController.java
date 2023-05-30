@@ -180,7 +180,15 @@ public class FilesController {
         }.getType()));
         fileWriter.close();
     }
+    public static void saveNumberOfBalls(Integer numberOfBalls) throws IOException {
+        File usersFile = new File("src/main/resources/data/Balls/Balls4.json");
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter(usersFile);
+        fileWriter.write(gson.toJson(numberOfBalls, new TypeToken<Integer>() {
+        }.getType()));
+        fileWriter.close();
 
+    }
     public static ArrayList<Double> getBalls() throws IOException {
         ArrayList<Double> balls = new ArrayList<>();
         File ballsFile = new File("src/main/resources/data/Balls/Balls.json");
@@ -226,4 +234,21 @@ public class FilesController {
         }
         return balls;
     }
+    public static Integer getNumberOfBalls() throws IOException {
+        Integer balls = 0;
+        File ballsFile = new File("src/main/resources/data/Balls/Balls4.json");
+        if (ballsFile.exists()) {
+            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+            balls = new Gson().fromJson(fileReader, new TypeToken<Integer>() {
+            }.getType());
+            fileReader.close();
+        } else {
+            balls = 0;
+            FileWriter fileWriter = new FileWriter(ballsFile);
+            fileWriter.close();
+        }
+        return balls;
+    }
+
+
 }
