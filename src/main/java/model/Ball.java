@@ -12,6 +12,7 @@ public class Ball extends Circle {
 
     public int radius;
     private int number;
+    private boolean isNumVisible = true;
     private Text text = null;
     private Stick stick = null;
 
@@ -54,5 +55,20 @@ public class Ball extends Circle {
 
     public void setShootAnimation(ShootAnimation shootAnimation) {
         this.shootAnimation = shootAnimation;
+    }
+    public Double getAngle(){
+        return Math.atan2(this.getCenterY()-300,this.getCenterX()-400);
+    }
+    public Integer getNumber(){
+        return number;
+    }
+
+    public boolean getIsNumVisible() {
+        return isNumVisible;
+    }
+
+    public void setIsNumVisible(boolean isNumVisible) {
+        this.isNumVisible = isNumVisible;
+        this.text.setVisible(isNumVisible);
     }
 }

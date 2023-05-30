@@ -1,5 +1,6 @@
 package view;
 
+import controller.SettingsController;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
@@ -49,7 +50,7 @@ public class ShootAnimation extends Transition {
         for (Ball ball1 : balls) {
 //            if (ball.getBoundsInParent().intersects(ball1.getBoundsInParent())) {
             if(!ball.equals(ball1)) {
-                if (Math.pow(ball.getCenterX() - ball1.getCenterX(), 2) + Math.pow(ball.getCenterY() - ball1.getCenterY(), 2) < Math.pow(32, 2)) {
+                if (Math.pow(ball.getCenterX() - ball1.getCenterX(), 2) + Math.pow(ball.getCenterY() - ball1.getCenterY(), 2) < Math.pow(2* SettingsController.getBallRadius(), 2)) {
                     isLost = true;
                     break;
                 }
@@ -70,7 +71,7 @@ public class ShootAnimation extends Transition {
                 gamePane.getChildren().add(ball.getBallStick());
                 GameMenu.gameController.removeAllAnimation(this);
 
-                RotationAnimation2 rotationAnimation = new RotationAnimation2(gamePane, ball, GameMenu.invisibleCircle, GameMenu.angleSpeedInput);
+                RotationAnimation2 rotationAnimation = new RotationAnimation2(gamePane, ball, GameMenu.invisibleCircle, GameMenu.angleSpeedInput ,Math.PI/2);
                 GameMenu.gameController.addAllAnimation(rotationAnimation);
                 rotationAnimation.play();
                 return false;
