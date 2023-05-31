@@ -9,6 +9,8 @@ import javafx.util.Duration;
 import view.GameMenu;
 import view.RotationAnimation2;
 
+import java.io.IOException;
+
 public class Phase2 {
     private static boolean isPhase2Finished = false;
     public static void timeLineHandlerChangeRotateSpeed(AnchorPane gamePane) {
@@ -39,7 +41,13 @@ public class Phase2 {
             connectedBall.setRadius(SettingsController.getBallRadius());
         }
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
-                actionEvent -> Phase2.changeRadius(gamePane)));
+                actionEvent -> {
+                    try {
+                        Phase2.changeRadius(gamePane);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }));
         timeline.setCycleCount(1);
         timeline.play();
     }
@@ -50,7 +58,7 @@ public class Phase2 {
         timeline.setCycleCount(1);
         timeline.play();
     }
-    private static void changeRadius(AnchorPane gamePane) {
+    private static void changeRadius(AnchorPane gamePane) throws IOException {
         if (isPhase2Finished) return;
         int randomRadius = 10 + (int) (Math.random() * (15 - 10));
 

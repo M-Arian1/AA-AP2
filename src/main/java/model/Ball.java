@@ -72,4 +72,8 @@ public class Ball extends Circle {
         this.isNumVisible = isNumVisible;
         this.text.setVisible(isNumVisible);
     }
+    public Text getBallText2(){
+        return text;
+    }
+
 }

@@ -5,6 +5,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,6 +70,11 @@ public class GameMenu extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        numberOfBalls = SettingsController.getMaxNumberOfBalls();
+        windSpeedRate = SettingsController.getWindSpeedRate();
+        time = SettingsController.getTime();
+        score = 0;
+        angleSpeedInput = SettingsController.getAngleSpeedInput();
         gameController = new GameController(username);
         GameMenu.stage = stage;
         AnchorPane gamePane = FXMLLoader.load(
@@ -179,10 +185,11 @@ public class GameMenu extends Application {
 
     private void setBallsLabelColor() {
         double colorPercent = (((double)(SettingsController.getMaxNumberOfBalls()))-(double)numberOfBalls)/(double)SettingsController.getMaxNumberOfBalls() * 255;
+//        System.out.println(SettingsController.getMaxNumberOfBalls() + "  " + numberOfBalls);
         remainedBallsLabel.setTextFill(Color.rgb(255 - (int)colorPercent, (int)colorPercent, 0));
     }
 
-    public static void checkPhase(AnchorPane gamePane) {
+    public static void checkPhase(AnchorPane gamePane) throws IOException {
         int maxNumberOfBalls = SettingsController.getMaxNumberOfBalls();
         if (numberOfBalls <= maxNumberOfBalls && numberOfBalls > maxNumberOfBalls*3/4 && phase!=1) {
 
@@ -190,7 +197,7 @@ public class GameMenu extends Application {
 
         }else if(numberOfBalls <= maxNumberOfBalls*3/4 && numberOfBalls > maxNumberOfBalls/2 && phase!=2) {
 
-            System.out.println(numberOfBalls);
+//            System.out.println(numberOfBalls);
             phase = 2;
             Phase2.setIsPhase2Finished(false);
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(300),
@@ -200,7 +207,7 @@ public class GameMenu extends Application {
 
         }else if(numberOfBalls <= maxNumberOfBalls/2 && numberOfBalls > maxNumberOfBalls/4 && phase!=3) {
             phase = 3;
-            System.out.println("yo");
+//            System.out.println("yo");
             Phase3.setIsPhase3Finished(false);
             Phase3.timeHandlerChangeVisibility(gamePane);
 
@@ -302,7 +309,11 @@ public class GameMenu extends Application {
                         }
                     }
                     if(time==0){
-                        lostTheGame();
+                        try {
+                            lostTheGame();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     time--;
                     timeLabel.setText(String.format("%02d:%02d", time / 60, time % 60));
@@ -399,9 +410,10 @@ public class GameMenu extends Application {
 
     public void checkNextMusic(MouseEvent mouseEvent) {
     }
-    public static void lostTheGame(){
+    public static void lostTheGame() throws IOException {
         for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
             connectedBall.setVisible(true);
+            connectedBall.getBallText2().setVisible(false);
             connectedBall.getBallText().setVisible(true);
             connectedBall.getBallStick().setVisible(true);
         }
@@ -423,9 +435,8 @@ public class GameMenu extends Application {
         GameMenu.gameController.getConnectedBalls().clear();
 
 
-
         gameController.getGamePane().setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000),
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
                 actionEvent -> {
                     try {
                         lostTimeline();
@@ -435,8 +446,26 @@ public class GameMenu extends Application {
                 }));
         timeline.setCycleCount(1);
         timeline.play();
+
+        if(score > FilesController.getUserByUsername(username).getScore(SettingsController.getLevel())){
+            FilesController.changeUserScore(FilesController.getUserByUsername(username), score, SettingsController.getLevel());
+            FilesController.changeUserTime(FilesController.getUserByUsername(username), time, SettingsController.getLevel());
+        }else if(score == FilesController.getUserByUsername(username).getScore(SettingsController.getLevel())){
+            if(time < FilesController.getUserByUsername(username).getTime(SettingsController.getLevel())){
+                FilesController.changeUserScore(FilesController.getUserByUsername(username), score, SettingsController.getLevel());
+                FilesController.changeUserTime(FilesController.getUserByUsername(username), time, SettingsController.getLevel());
+            }
+        }
+
     }
-    public static void wonTheGame(){
+    public static void wonTheGame() throws IOException {
+        for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
+            connectedBall.setVisible(true);
+            connectedBall.getBallText2().setVisible(false);
+            connectedBall.getBallText().setVisible(true);
+            connectedBall.getBallStick().setVisible(true);
+        }
+        gameController.setLost(true);
         pauseButton.setVisible(false);
         windLabel.setVisible(false);
         progressBar.setVisible(false);
@@ -466,13 +495,57 @@ public class GameMenu extends Application {
                 }));
         timeline.setCycleCount(1);
         timeline.play();
+
+        if(score > FilesController.getUserByUsername(username).getScore(SettingsController.getLevel())){
+            FilesController.changeUserScore(FilesController.getUserByUsername(username), score, SettingsController.getLevel());
+            FilesController.changeUserTime(FilesController.getUserByUsername(username), time, SettingsController.getLevel());
+        }else if(score == FilesController.getUserByUsername(username).getScore(SettingsController.getLevel())){
+            if(time < FilesController.getUserByUsername(username).getTime(SettingsController.getLevel())){
+                FilesController.changeUserScore(FilesController.getUserByUsername(username), score, SettingsController.getLevel());
+                FilesController.changeUserTime(FilesController.getUserByUsername(username), time, SettingsController.getLevel());
+            }
+        }
     }
 
     private static void wonTimeLine() throws Exception {
-        new ScoreMenu().start(stage);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("You Won");
+        alert.setHeaderText("You Won");
+        alert.setContentText("Your Score: " + score + "\nYour Time: " + time);
+        alert.show();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
+                actionEvent -> {
+                    try {
+                        exitTimeline();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
     private static void lostTimeline() throws Exception {
-        new ScoreMenu().start(stage);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("You Lost");
+        alert.setHeaderText("You Lost");
+        alert.setContentText("Your Score: " + score + "\nYour Time: " + time);
+        alert.show();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
+                actionEvent -> {
+                    try {
+                        exitTimeline();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }));
+        timeline.setCycleCount(1);
+        timeline.play();
+    }
+
+    private static void exitTimeline() throws Exception {
+        new MainMenu().start(stage);
     }
 
 }

@@ -17,6 +17,7 @@ import javafx.util.Duration;
 import model.Ball;
 import model.Game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ShootAnimation extends Transition {
@@ -36,17 +37,21 @@ public class ShootAnimation extends Transition {
     @Override
     protected void interpolate(double v) {
 
-        if(checkCollision(Anchorpane,ball)) {
-            ball.setCenterY(ball.getCenterY() - 5*Math.cos(Math.toRadians(GameMenu.windSpeed)));
-            ball.setCenterX(ball.getCenterX() + 5*Math.sin(Math.toRadians(GameMenu.windSpeed)));
-            ball.getBallText().setY(ball.getBallText().getY() - 5*Math.cos(Math.toRadians(GameMenu.windSpeed)));
-            ball.getBallText().setX(ball.getBallText().getX() + 5*Math.sin(Math.toRadians(GameMenu.windSpeed)));
-        }else{
-            this.stop();
+        try {
+            if(checkCollision(Anchorpane,ball)) {
+                ball.setCenterY(ball.getCenterY() - 5*Math.cos(Math.toRadians(GameMenu.windSpeed)));
+                ball.setCenterX(ball.getCenterX() + 5*Math.sin(Math.toRadians(GameMenu.windSpeed)));
+                ball.getBallText().setY(ball.getBallText().getY() - 5*Math.cos(Math.toRadians(GameMenu.windSpeed)));
+                ball.getBallText().setX(ball.getBallText().getX() + 5*Math.sin(Math.toRadians(GameMenu.windSpeed)));
+            }else{
+                this.stop();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private Boolean checkCollision(AnchorPane gamePane, Ball ball) {
+    private Boolean checkCollision(AnchorPane gamePane, Ball ball) throws IOException {
         Boolean isLost = false;
         ArrayList<Ball> balls = GameMenu.gameController.getConnectedBalls();
         for (Ball ball1 : balls) {

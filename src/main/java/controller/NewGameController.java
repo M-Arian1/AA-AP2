@@ -8,6 +8,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import model.*;
 import view.GameMenu;
+import view.MainMenu;
 import view.RotationAnimation2;
 
 import java.io.IOException;
@@ -161,7 +162,7 @@ public class NewGameController {
     }
     public static void saveGame() throws IOException {
         SaveOb saveOb = new SaveOb();
-        saveOb.setUsername(GameMenu.username);
+        saveOb.setUsername(MainMenu.username);
         ArrayList<Double> ballsAngle = new ArrayList<>();
         for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
             ballsAngle.add(connectedBall.getAngle());
@@ -179,6 +180,15 @@ public class NewGameController {
         saveOb.setScore(GameMenu.score);
         saveOb.setTime(GameMenu.time);
         saveOb.setAngleSpeedInput(GameMenu.angleSpeedInput);
+        saveOb.setLevel(SettingsController.getLevel());
+        SettingsControllerOb settingsControllerOb = new SettingsControllerOb();
+        settingsControllerOb.setOb();
+        saveOb.setSettingsControllerOb(settingsControllerOb);
+        FilesController.saveOneGame(saveOb);
+    }
+    public static void saveSettings() throws IOException {
+        SaveOb saveOb = FilesController.loadOneGame(GameMenu.username);
+        saveOb.setUsername(GameMenu.username);
         saveOb.setLevel(SettingsController.getLevel());
         SettingsControllerOb settingsControllerOb = new SettingsControllerOb();
         settingsControllerOb.setOb();

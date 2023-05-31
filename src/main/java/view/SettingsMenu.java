@@ -136,6 +136,6 @@ public class SettingsMenu extends Application {
         FilesController.saveSettingControllerOb(settingsControllerOb);
     }
     public void loadSettings() throws IOException {
-        FilesController.setSettingsControllerOb();
+        FilesController.loadSettingsControllerOb();
     }
 }

@@ -57,6 +57,7 @@ public class LoginMenu extends Application{
             MainMenu.username = username.getText();
             FilesController.setCurrentUser(FilesController.getUserByUsername(username.getText()));
             new MainMenu().start(LoginMenu.stage);
+            MainMenu.username = username.getText();
         }
         else{
             Alert alert = new Alert(Alert.AlertType.ERROR);

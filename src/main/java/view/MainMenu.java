@@ -5,19 +5,14 @@ import controller.GameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Avatar;
-import model.Game;
 import model.User;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainMenu extends Application {
@@ -27,7 +22,8 @@ public class MainMenu extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FilesController.setSettingsControllerOb();
+        FilesController.loadSettingsControllerOb();
+        username = FilesController.getCurrentUser();
         MainMenu.stage = stage;
         AnchorPane mainPane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/mainMenu.fxml").toExternalForm()));
