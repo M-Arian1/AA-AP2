@@ -58,6 +58,7 @@ public class GameMenu extends Application {
     public static int phase = 0;
     public static int time = SettingsController.getTime();
     public static int score = 0;
+
     public static double angleSpeedInput = SettingsController.getAngleSpeedInput();
     public static Circle mainCircle = new Circle(400, 300, mainCircleRadius);
 
@@ -72,6 +73,7 @@ public class GameMenu extends Application {
         GameMenu.stage = stage;
         AnchorPane gamePane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/gameMenu.fxml").toExternalForm()));
+
         pausePane = (AnchorPane)gamePane.getChildren().get(1);
         pausePane.setVisible(false);
         pauseButton = (Button)gamePane.getChildren().get(0);
@@ -102,7 +104,7 @@ public class GameMenu extends Application {
         windLabel.setText("WindSpeed: "+windSpeed);
 
 
-        if(isBeingLoaded){System.out.println("salam");
+        if(isBeingLoaded){
             NewGameController.loadGame(gamePane);
         }else{
             NewGameController.newGame(gamePane, SettingsController.getMapNumber());
@@ -149,10 +151,6 @@ public class GameMenu extends Application {
                     numberOfBalls--;
                     remainedBallsLabel.setText("Remained Balls: "+numberOfBalls);
                     setBallsLabelColor();
-
-                    checkPhase(gamePane);
-                    iceModeCount++;
-                    progressBar.setProgress(iceModeCount/SettingsController.getIceModeNeededBalls());
                 } else if (keyName.equals(SettingsController.getIceButton())) {
                     iceModeTimeline(gamePane);
 
@@ -184,12 +182,15 @@ public class GameMenu extends Application {
         remainedBallsLabel.setTextFill(Color.rgb(255 - (int)colorPercent, (int)colorPercent, 0));
     }
 
-    private void checkPhase(AnchorPane gamePane) {
+    public static void checkPhase(AnchorPane gamePane) {
         int maxNumberOfBalls = SettingsController.getMaxNumberOfBalls();
         if (numberOfBalls <= maxNumberOfBalls && numberOfBalls > maxNumberOfBalls*3/4 && phase!=1) {
+
             phase = 1;
 
         }else if(numberOfBalls <= maxNumberOfBalls*3/4 && numberOfBalls > maxNumberOfBalls/2 && phase!=2) {
+
+            System.out.println(numberOfBalls);
             phase = 2;
             Phase2.setIsPhase2Finished(false);
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(300),
@@ -199,6 +200,7 @@ public class GameMenu extends Application {
 
         }else if(numberOfBalls <= maxNumberOfBalls/2 && numberOfBalls > maxNumberOfBalls/4 && phase!=3) {
             phase = 3;
+            System.out.println("yo");
             Phase3.setIsPhase3Finished(false);
             Phase3.timeHandlerChangeVisibility(gamePane);
 
@@ -208,17 +210,17 @@ public class GameMenu extends Application {
             Phase4.windEventHandler(gamePane);
 
         }else if(numberOfBalls == 0) {
-            //TODO
+            wonTheGame();
         }
     }
 
-    private void timelineForPhase2(AnchorPane gamePane) {
+    public static void timelineForPhase2(AnchorPane gamePane) {
         changeRotateSpeed(gamePane);
         Phase2.timeLineHandlerChangeRotateSpeed(gamePane);
         Phase2.timeHandlerChangeRadius(gamePane);
     }
 
-    private void changeRotateSpeed(AnchorPane gamePane) {
+    private static void changeRotateSpeed(AnchorPane gamePane) {
         for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
             if (allAnimation instanceof RotationAnimation2) {
                 ((RotationAnimation2) allAnimation).setAngleSpeed(-((RotationAnimation2) allAnimation).getAngleSpeed());
@@ -291,6 +293,14 @@ public class GameMenu extends Application {
     public void timeTimeLineStart(){
         timeTimeline = new Timeline(new KeyFrame(Duration.millis(1000),
                 actionEvent -> {
+                    if(pausePane.isVisible()) return;
+                    if(gameController.isLost()) {
+                        try {
+                            this.stop();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                     if(time==0){
                         lostTheGame();
                     }
@@ -343,6 +353,7 @@ public class GameMenu extends Application {
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {
+        timeTimeline.stop();
 
         for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
             allAnimation.stop();

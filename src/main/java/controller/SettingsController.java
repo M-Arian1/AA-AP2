@@ -1,5 +1,7 @@
 package controller;
 
+import model.Level;
+
 public class SettingsController {
     private static int mapNumber = 0;
     private static int maxNumberOfBalls = 10;
@@ -16,6 +18,7 @@ public class SettingsController {
     private static String iceButton = "Tab";
 
     private static int time = 67;
+    private static Level level = Level.MEDIUM;
 
     public static int getMapNumber() {
         return mapNumber;
@@ -143,5 +146,13 @@ public class SettingsController {
 
     public static void setTime(int time) {
         SettingsController.time = time;
+    }
+
+    public static Level getLevel() {
+        return level;
+    }
+
+    public static void setLevel(Level level) {
+        SettingsController.level = level;
     }
 }

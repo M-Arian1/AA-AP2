@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-//TODO: maaree after lost, giving scores to users(and gamemode easy, hard ,...), time in save
+//TODO : giving scores to users(and gamemode easy, hard ,...), won the game
 
 public class ScoreMenu extends Application {
     public static Stage stage;

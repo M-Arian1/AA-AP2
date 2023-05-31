@@ -1,5 +1,7 @@
 package controller;
 
+import model.Level;
+
 public class SettingsControllerOb {
     private int mapNumber = 0;
     private int maxNumberOfBalls = 10;
@@ -15,6 +17,7 @@ public class SettingsControllerOb {
     private String shootButton = "Space";
     private String iceButton = "Tab";
 
+    private Level level = Level.MEDIUM;
 
     public int getMapNumber() {
         return mapNumber;
@@ -134,6 +137,7 @@ public class SettingsControllerOb {
         setPersian(SettingsController.isPersian());
         setShootButton(SettingsController.getShootButton());
         setIceButton(SettingsController.getIceButton());
+        setLevel(SettingsController.getLevel());
     }
     public void setStatic(){
         SettingsController.setMapNumber(getMapNumber());
@@ -149,5 +153,14 @@ public class SettingsControllerOb {
         SettingsController.setPersian(isPersian());
         SettingsController.setShootButton(getShootButton());
         SettingsController.setIceButton(getIceButton());
+        SettingsController.setLevel(getLevel());
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
     }
 }

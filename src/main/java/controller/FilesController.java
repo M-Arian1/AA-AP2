@@ -3,10 +3,13 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.DataBase;
+import model.SaveOb;
 import model.User;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FilesController {
 
@@ -156,107 +159,161 @@ public class FilesController {
             return null;
         }
     }
-    public static void saveBalls(ArrayList<Double> balls) throws IOException {
-        File usersFile = new File("src/main/resources/data/Balls/Balls.json");
+    public static void saveGame(HashMap<String, SaveOb> saveObs) throws IOException {
+        File usersFile = new File("src/main/resources/data/SaveObs.json");
         Gson gson = new Gson();
         FileWriter fileWriter = new FileWriter(usersFile);
-        fileWriter.write(gson.toJson(balls, new TypeToken<ArrayList<Double>>() {
-        }.getType()));
-        fileWriter.close();
-    }
-    public static void saveBallsNumbers(ArrayList<Integer> balls) throws IOException {
-        File usersFile = new File("src/main/resources/data/Balls/Balls2.json");
-        Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter(usersFile);
-        fileWriter.write(gson.toJson(balls, new TypeToken<ArrayList<Integer>>() {
-        }.getType()));
-        fileWriter.close();
-    }
-    public static void saveBallsIce(Integer Ice) throws IOException {
-        File usersFile = new File("src/main/resources/data/Balls/Balls3.json");
-        Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter(usersFile);
-        fileWriter.write(gson.toJson(Ice, new TypeToken<Integer>() {
-        }.getType()));
-        fileWriter.close();
-    }
-    public static void saveNumberOfBalls(Integer numberOfBalls) throws IOException {
-        File usersFile = new File("src/main/resources/data/Balls/Balls4.json");
-        Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter(usersFile);
-        fileWriter.write(gson.toJson(numberOfBalls, new TypeToken<Integer>() {
+        fileWriter.write(gson.toJson(saveObs, new TypeToken<HashMap<String, SaveOb>>() {
         }.getType()));
         fileWriter.close();
 
     }
+    public static HashMap<String, SaveOb> getSaveObs() throws IOException {
+        File usersFile = new File("src/main/resources/data/SaveObs.json");
+        if (usersFile.exists()) {
+            BufferedReader fileReader = new BufferedReader(new FileReader(usersFile));
+            HashMap<String, SaveOb> saveObs = new Gson().fromJson(fileReader, new TypeToken<HashMap<String, SaveOb>>() {
+            }.getType());
+            fileReader.close();
+            return saveObs;
+        } else {
+            HashMap<String, SaveOb> saveObs = new HashMap<String, SaveOb>();
+            FileWriter fileWriter = new FileWriter(usersFile);
+            fileWriter.close();
+            return saveObs;
+        }
 
-    public static ArrayList<Double> getBalls() throws IOException {
-        ArrayList<Double> balls = new ArrayList<>();
-        File ballsFile = new File("src/main/resources/data/Balls/Balls.json");
-        if (ballsFile.exists()) {
-            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
-            balls = new Gson().fromJson(fileReader, new TypeToken<ArrayList<Double>>() {
-            }.getType());
-            fileReader.close();
-        } else {
-            balls = new ArrayList<Double>();
-            FileWriter fileWriter = new FileWriter(ballsFile);
-            fileWriter.close();
-        }
-        return balls;
     }
-    public static ArrayList<Integer> getBallsNumbers() throws IOException {
-        ArrayList<Integer> balls = new ArrayList<>();
-        File ballsFile = new File("src/main/resources/data/Balls/Balls2.json");
-        if (ballsFile.exists()) {
-            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
-            balls = new Gson().fromJson(fileReader, new TypeToken<ArrayList<Integer>>() {
-            }.getType());
-            fileReader.close();
-        } else {
-            balls = new ArrayList<Integer>();
-            FileWriter fileWriter = new FileWriter(ballsFile);
-            fileWriter.close();
-        }
-        return balls;
+    public static void saveOneGame(SaveOb saveOb) throws IOException {
+        HashMap<String, SaveOb> saveObs = new HashMap<String, SaveOb>();
+        saveObs = FilesController.getSaveObs();
+        if(saveObs == null) saveObs = new HashMap<String, SaveOb>();
+        saveObs.put(saveOb.getUsername(), saveOb);
+        saveGame(saveObs);
     }
-    public static Integer getBallsIce() throws IOException {
-        Integer balls = 0;
-        File ballsFile = new File("src/main/resources/data/Balls/Balls3.json");
-        if (ballsFile.exists()) {
-            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
-            balls = new Gson().fromJson(fileReader, new TypeToken<Integer>() {
-            }.getType());
-            fileReader.close();
-        } else {
-            balls = 0;
-            FileWriter fileWriter = new FileWriter(ballsFile);
-            fileWriter.close();
-        }
-        return balls;
+    public static SaveOb loadOneGame(String username) throws IOException {
+        HashMap<String, SaveOb> saveObs = new HashMap<String, SaveOb>();
+        saveObs = FilesController.getSaveObs();
+        if(saveObs == null) return null;
+        return saveObs.get(username);
     }
-    public static Integer getNumberOfBalls() throws IOException {
-        Integer balls = 0;
-        File ballsFile = new File("src/main/resources/data/Balls/Balls4.json");
-        if (ballsFile.exists()) {
-            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
-            balls = new Gson().fromJson(fileReader, new TypeToken<Integer>() {
-            }.getType());
-            fileReader.close();
-        } else {
-            balls = 0;
-            FileWriter fileWriter = new FileWriter(ballsFile);
-            fileWriter.close();
-        }
-        return balls;
-    }
+//    public static void saveBalls(ArrayList<Double> balls) throws IOException {
+//        File usersFile = new File("src/main/resources/data/Balls/Balls.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(usersFile);
+//        fileWriter.write(gson.toJson(balls, new TypeToken<ArrayList<Double>>() {
+//        }.getType()));
+//        fileWriter.close();
+//    }
+//    public static void saveBallsNumbers(ArrayList<Integer> balls) throws IOException {
+//        File usersFile = new File("src/main/resources/data/Balls/Balls2.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(usersFile);
+//        fileWriter.write(gson.toJson(balls, new TypeToken<ArrayList<Integer>>() {
+//        }.getType()));
+//        fileWriter.close();
+//    }
+//    public static void saveBallsIce(Integer Ice) throws IOException {
+//        File usersFile = new File("src/main/resources/data/Balls/Balls3.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(usersFile);
+//        fileWriter.write(gson.toJson(Ice, new TypeToken<Integer>() {
+//        }.getType()));
+//        fileWriter.close();
+//    }
+//    public static void saveNumberOfBalls(Integer numberOfBalls) throws IOException {
+//        File usersFile = new File("src/main/resources/data/Balls/Balls4.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(usersFile);
+//        fileWriter.write(gson.toJson(numberOfBalls, new TypeToken<Integer>() {
+//        }.getType()));
+//        fileWriter.close();
+//
+//    }
+//    public static void saveScore(Integer score) throws IOException {
+//        File usersFile = new File("src/main/resources/data/Balls/Balls5.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(usersFile);
+//        fileWriter.write(gson.toJson(score, new TypeToken<Integer>() {
+//        }.getType()));
+//        fileWriter.close();
+//    }
+//    public static void saveTime(Integer time) throws IOException {
+//        File usersFile = new File("src/main/resources/data/Balls/Balls6.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(usersFile);
+//        fileWriter.write(gson.toJson(time, new TypeToken<Integer>() {
+//        }.getType()));
+//        fileWriter.close();
+//    }
+//
+//    public static ArrayList<Double> getBalls() throws IOException {
+//        ArrayList<Double> balls = new ArrayList<>();
+//        File ballsFile = new File("src/main/resources/data/Balls/Balls.json");
+//        if (ballsFile.exists()) {
+//            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+//            balls = new Gson().fromJson(fileReader, new TypeToken<ArrayList<Double>>() {
+//            }.getType());
+//            fileReader.close();
+//        } else {
+//            balls = new ArrayList<Double>();
+//            FileWriter fileWriter = new FileWriter(ballsFile);
+//            fileWriter.close();
+//        }
+//        return balls;
+//    }
+//    public static ArrayList<Integer> getBallsNumbers() throws IOException {
+//        ArrayList<Integer> balls = new ArrayList<>();
+//        File ballsFile = new File("src/main/resources/data/Balls/Balls2.json");
+//        if (ballsFile.exists()) {
+//            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+//            balls = new Gson().fromJson(fileReader, new TypeToken<ArrayList<Integer>>() {
+//            }.getType());
+//            fileReader.close();
+//        } else {
+//            balls = new ArrayList<Integer>();
+//            FileWriter fileWriter = new FileWriter(ballsFile);
+//            fileWriter.close();
+//        }
+//        return balls;
+//    }
+//    public static Integer getBallsIce() throws IOException {
+//        Integer balls = 0;
+//        File ballsFile = new File("src/main/resources/data/Balls/Balls3.json");
+//        if (ballsFile.exists()) {
+//            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+//            balls = new Gson().fromJson(fileReader, new TypeToken<Integer>() {
+//            }.getType());
+//            fileReader.close();
+//        } else {
+//            balls = 0;
+//            FileWriter fileWriter = new FileWriter(ballsFile);
+//            fileWriter.close();
+//        }
+//        return balls;
+//    }
+//    public static Integer getNumberOfBalls() throws IOException {
+//        Integer balls = 0;
+//        File ballsFile = new File("src/main/resources/data/Balls/Balls4.json");
+//        if (ballsFile.exists()) {
+//            BufferedReader fileReader = new BufferedReader(new FileReader(ballsFile));
+//            balls = new Gson().fromJson(fileReader, new TypeToken<Integer>() {
+//            }.getType());
+//            fileReader.close();
+//        } else {
+//            balls = 0;
+//            FileWriter fileWriter = new FileWriter(ballsFile);
+//            fileWriter.close();
+//        }
+//        return balls;
+//    }
     public static void saveSettingControllerOb(SettingsControllerOb settingControllerOb) throws IOException {
-        File usersFile = new File("src/main/resources/data/Settings.json");
-        Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter(usersFile);
-        fileWriter.write(gson.toJson(settingControllerOb, new TypeToken<SettingsControllerOb>() {
-        }.getType()));
-        fileWriter.close();
+//        File usersFile = new File("src/main/resources/data/Settings.json");
+//        Gson gson = new Gson();
+//        FileWriter fileWriter = new FileWriter(usersFile);
+//        fileWriter.write(gson.toJson(settingControllerOb, new TypeToken<SettingsControllerOb>() {
+//        }.getType()));
+//        fileWriter.close();
     }
     public static void setSettingsControllerOb() throws IOException {
         File settingsFile = new File("src/main/resources/data/Settings.json");

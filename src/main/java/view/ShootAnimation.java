@@ -73,6 +73,8 @@ public class ShootAnimation extends Transition {
         else{
             if(Math.pow(ball.getCenterY()-300,2) + Math.pow(ball.getCenterX()-400,2) < Math.pow(GameMenu.invisibleCircleRadius,2)) {
                 this.stop();
+                GameMenu.iceModeCount++;
+                GameMenu.progressBar.setProgress(GameMenu.iceModeCount/SettingsController.getIceModeNeededBalls());
                 GameMenu.score += 5;
                 GameMenu.scoreLabel.setText("Score: " + GameMenu.score);
                 GameMenu.gameController.addConnectedBall(ball);
@@ -80,9 +82,11 @@ public class ShootAnimation extends Transition {
                 GameMenu.gameController.removeAllAnimation(this);
 
                 RotationAnimation2 rotationAnimation = new RotationAnimation2(gamePane, ball, GameMenu.invisibleCircle, GameMenu.angleSpeedInput ,Math.atan2(ball.getCenterY() - GameMenu.invisibleCircle.getCenterY(), ball.getCenterX() - GameMenu.invisibleCircle.getCenterX()));
+                rotationAnimation.setDelay(Duration.millis(0));
                 GameMenu.gameController.addAllAnimation(rotationAnimation);
 
                 rotationAnimation.play();
+                GameMenu.checkPhase(gamePane);
                 return false;
             }
         }

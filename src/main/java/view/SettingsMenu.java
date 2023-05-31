@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Level;
 
 import java.io.IOException;
 import java.net.URL;
@@ -69,18 +70,21 @@ public class SettingsMenu extends Application {
 
 
     public void checkEasy(MouseEvent mouseEvent) {
+        SettingsController.setLevel(Level.EASY);
         SettingsController.setAngleSpeedInput(0.7);
         SettingsController.setWindSpeedRate(1);
         SettingsController.setIceModeTimer(7);
     }
 
     public void checkMedium(MouseEvent mouseEvent) {
+        SettingsController.setLevel(Level.MEDIUM);
         SettingsController.setAngleSpeedInput(1);
         SettingsController.setWindSpeedRate(3);
         SettingsController.setIceModeTimer(5);
     }
 
     public void checkHard(MouseEvent mouseEvent) {
+        SettingsController.setLevel(Level.HARD);
         SettingsController.setAngleSpeedInput(1.5);
         SettingsController.setWindSpeedRate(5);
         SettingsController.setIceModeTimer(3);
