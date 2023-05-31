@@ -20,12 +20,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -97,9 +100,12 @@ public class GameMenu extends Application {
         setBallsLabelColor();
 
         windLabel.setText("WindSpeed: "+windSpeed);
-        NewGameController.newGame(gamePane, SettingsController.getMapNumber());
-        if(isBeingLoaded){
+
+
+        if(isBeingLoaded){System.out.println("salam");
             NewGameController.loadGame(gamePane);
+        }else{
+            NewGameController.newGame(gamePane, SettingsController.getMapNumber());
         }
         mainCircle = new Circle(400, 300, mainCircleRadius);
         gamePane.getChildren().add(mainCircle);
@@ -362,6 +368,14 @@ public class GameMenu extends Application {
     }
 
     public void checkMuteMusic(MouseEvent mouseEvent) {
+//        //open and play a music file from the local directory
+//        String musicFile = "src/sample/Music/BackgroundMusic.mp3";
+//        Media sound = new Media(new File(musicFile).toURI().toString());
+//        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+//        mediaPlayer.setVolume(0);
+//        mediaPlayer.play();
+
+
     }
 
     public void checkGuide(MouseEvent mouseEvent) {
@@ -375,6 +389,11 @@ public class GameMenu extends Application {
     public void checkNextMusic(MouseEvent mouseEvent) {
     }
     public static void lostTheGame(){
+        for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
+            connectedBall.setVisible(true);
+            connectedBall.getBallText().setVisible(true);
+            connectedBall.getBallStick().setVisible(true);
+        }
         gameController.setLost(true);
         pauseButton.setVisible(false);
         windLabel.setVisible(false);

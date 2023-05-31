@@ -97,6 +97,7 @@ public class NewGameController {
         Circle invisibleCircle = new Circle(400, 300, GameMenu.invisibleCircleRadius);
         GameMenu.iceModeCount = FilesController.getBallsIce();
         GameMenu.numberOfBalls = FilesController.getNumberOfBalls();
+        System.out.println("salam");
         GameMenu.progressBar.setProgress(GameMenu.iceModeCount / SettingsController.getIceModeNeededBalls());
         ArrayList<Double> map = FilesController.getBalls();
         ArrayList<Integer> ballsnumbers = FilesController.getBallsNumbers();

@@ -55,6 +55,7 @@ public class MainMenu extends Application {
 
 
     public void checkNewGame(MouseEvent mouseEvent) throws Exception {
+
         GameMenu.username = username;
         GameMenu.isBeingLoaded = false;
         new GameMenu().start(stage);

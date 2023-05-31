@@ -30,6 +30,7 @@ public class Phase3 {
     }
     private static void changeVisibility(AnchorPane gamePane) {
         if (isPhase3Finished) return;
+
         for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
             if(!connectedBall.isPaused) {
                 connectedBall.setVisible(false);
@@ -37,6 +38,7 @@ public class Phase3 {
                 connectedBall.getBallStick().setVisible(false);
             }
         }
+
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
                 actionEvent -> Phase3.timeHandlerChangeVisibility(gamePane)));
