@@ -16,6 +16,7 @@ public class GameController {
 
     private String username;
     private AnchorPane gamePane;
+    private boolean isLost = false;
     private ArrayList<Ball> connectedBalls = new ArrayList<>();
     private ArrayList<Animation> allAnimations = new ArrayList<>();
     public GameController(String username) {
@@ -104,6 +105,14 @@ public class GameController {
 
     public void setGamePane(AnchorPane gamePane) {
         this.gamePane = gamePane;
+    }
+
+    public boolean isLost() {
+        return isLost;
+    }
+
+    public void setLost(boolean lost) {
+        isLost = lost;
     }
 
 

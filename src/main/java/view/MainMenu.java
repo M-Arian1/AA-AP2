@@ -27,6 +27,7 @@ public class MainMenu extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        FilesController.setSettingsControllerOb();
         MainMenu.stage = stage;
         AnchorPane mainPane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/mainMenu.fxml").toExternalForm()));

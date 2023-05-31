@@ -2,28 +2,16 @@ package view;
 
 import controller.*;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.Avatar;
-import model.Level;
-import model.User;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class SettingsMenu extends Application {
     public static Stage stage;
@@ -75,6 +63,7 @@ public class SettingsMenu extends Application {
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {
+        loadSettings();
         new MainMenu().start(stage);
     }
 
@@ -138,9 +127,11 @@ public class SettingsMenu extends Application {
 
     public void saveSettings(MouseEvent mouseEvent) throws IOException {
         SettingsController settingController = new SettingsController();
-        FilesController.saveSettingController(settingController);
+        SettingsControllerOb settingsControllerOb = new SettingsControllerOb();
+        settingsControllerOb.setOb();
+        FilesController.saveSettingControllerOb(settingsControllerOb);
     }
     public void loadSettings() throws IOException {
-        FilesController.setSettingsController();
+        FilesController.setSettingsControllerOb();
     }
 }

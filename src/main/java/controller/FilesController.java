@@ -189,14 +189,7 @@ public class FilesController {
         fileWriter.close();
 
     }
-    public static void saveSettingController(SettingsController settingController) throws IOException {
-        File usersFile = new File("src/main/resources/data/Settings.json");
-        Gson gson = new Gson();
-        FileWriter fileWriter = new FileWriter(usersFile);
-        fileWriter.write(gson.toJson(settingController, new TypeToken<SettingsController>() {
-        }.getType()));
-        fileWriter.close();
-    }
+
     public static ArrayList<Double> getBalls() throws IOException {
         ArrayList<Double> balls = new ArrayList<>();
         File ballsFile = new File("src/main/resources/data/Balls/Balls.json");
@@ -257,16 +250,26 @@ public class FilesController {
         }
         return balls;
     }
-    public static void setSettingsController() throws IOException {
+    public static void saveSettingControllerOb(SettingsControllerOb settingControllerOb) throws IOException {
+        File usersFile = new File("src/main/resources/data/Settings.json");
+        Gson gson = new Gson();
+        FileWriter fileWriter = new FileWriter(usersFile);
+        fileWriter.write(gson.toJson(settingControllerOb, new TypeToken<SettingsControllerOb>() {
+        }.getType()));
+        fileWriter.close();
+    }
+    public static void setSettingsControllerOb() throws IOException {
         File settingsFile = new File("src/main/resources/data/Settings.json");
         if (settingsFile.exists()) {
             BufferedReader fileReader = new BufferedReader(new FileReader(settingsFile));
-            SettingsController settingController = new Gson().fromJson(fileReader, new TypeToken<SettingsController>() {
+            SettingsControllerOb settingControllerOb = new Gson().fromJson(fileReader, new TypeToken<SettingsControllerOb>() {
             }.getType());
             fileReader.close();
-            SettingsController.setInstance(settingController);
+            settingControllerOb.setStatic();
         } else {
-            SettingsController.setInstance(new SettingsController());
+            SettingsControllerOb settingControllerOb = new SettingsControllerOb();
+            FileWriter fileWriter = new FileWriter(settingsFile);
+            fileWriter.close();
         }
 
     }

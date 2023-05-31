@@ -58,10 +58,7 @@ public class Phase2 {
             connectedBall.setRadius(connectedBall.getRadius() * (100+randomRadius)/100);
         }
         if(GameMenu.checkCollision(gamePane)==true){
-                for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
-                    allAnimation.stop();
-                }
-                //TODO: show lost page
+                GameMenu.lostTheGame();
         }
         timeHandlerTimeHandlerChangeRadius(gamePane);
     }

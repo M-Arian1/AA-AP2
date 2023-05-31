@@ -66,16 +66,15 @@ public class ShootAnimation extends Transition {
 
 
         if (isLost) {
-            for (Animation allAnimation : GameMenu.gameController.getAllAnimations()) {
-                allAnimation.stop();
-            }
+            GameMenu.lostTheGame();
             return false;
-            //TODO: show lost page
-            //please dont f up
+            //please don't f up
         }
         else{
             if(Math.pow(ball.getCenterY()-300,2) + Math.pow(ball.getCenterX()-400,2) < Math.pow(GameMenu.invisibleCircleRadius,2)) {
                 this.stop();
+                GameMenu.score += 5;
+                GameMenu.scoreLabel.setText("Score: " + GameMenu.score);
                 GameMenu.gameController.addConnectedBall(ball);
 
                 GameMenu.gameController.removeAllAnimation(this);

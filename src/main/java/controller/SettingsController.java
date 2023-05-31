@@ -15,6 +15,8 @@ public class SettingsController {
     private static String shootButton = "Space";
     private static String iceButton = "Tab";
 
+    private static int time = 67;
+
     public static int getMapNumber() {
         return mapNumber;
     }
@@ -133,5 +135,13 @@ public class SettingsController {
         SettingsController.isPersian = settingController.isPersian;
         SettingsController.shootButton = settingController.shootButton;
         SettingsController.iceButton = settingController.iceButton;
+    }
+
+    public static int getTime() {
+        return time;
+    }
+
+    public static void setTime(int time) {
+        SettingsController.time = time;
     }
 }

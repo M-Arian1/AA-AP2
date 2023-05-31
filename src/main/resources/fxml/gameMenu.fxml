@@ -5,7 +5,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GameMenu">
    <children>
-      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#checkPause" text="Pause" />
+      <Button fx:id="pauseButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#checkPause" text="Pause" />
       <AnchorPane fx:id="pausePane" layoutX="122.0" layoutY="80.0" prefHeight="459.0" prefWidth="569.0" visible="false">
          <children>
             <Button layoutX="259.0" layoutY="25.0" mnemonicParsing="false" text="Save Game" onMouseClicked="#checkSave"/>
