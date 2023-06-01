@@ -5,7 +5,7 @@ import model.Level;
 public class SettingsController {
     private static int mapNumber = 0;
     private static int maxNumberOfBalls = 10;
-    private static int ballRadius = 5;
+    private static int ballRadius = 10;
     private static double iceModeNeededBalls = 5.0;
     private static double angleSpeedInput = 1.0;
     private static int iceModeTimer = 5;

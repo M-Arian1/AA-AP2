@@ -125,11 +125,10 @@ public class GameMenu extends Application {
 
         windLabel.setText("WindSpeed: "+windSpeed);
 
-
         if(isBeingLoaded){
             NewGameController.loadGame(gamePane);
         }else{
-            NewGameController.newGame(gamePane, SettingsController.getMapNumber());
+            NewGameController.newGame(gamePane,SettingsController.getMapNumber());
         }
         mainCircle = new Circle(400, 300, mainCircleRadius);
         gamePane.getChildren().add(mainCircle);

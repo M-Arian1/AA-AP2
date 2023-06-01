@@ -100,7 +100,7 @@ public class NewGameController {
     }
     public static void loadGame(AnchorPane gamePane) throws IOException {
         Circle invisibleCircle = new Circle(400, 300, GameMenu.invisibleCircleRadius);
-        SaveOb saveOb = FilesController.loadOneGame(GameMenu.username);
+        SaveOb saveOb = FilesController.loadOneGame(MainMenu.username);
         GameMenu.iceModeCount = saveOb.getBallsIce();
         GameMenu.numberOfBalls = saveOb.getNumberOfBalls();
         GameMenu.angleSpeedInput = saveOb.getAngleSpeedInput();

@@ -2,10 +2,12 @@ package view;
 
 import controller.FilesController;
 import controller.GameController;
+import controller.NewGameController;
 import controller.SettingsController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -63,8 +65,17 @@ public class MainMenu extends Application {
     }
 
     public void checkLoadGame(MouseEvent mouseEvent) throws Exception {
+        if(FilesController.loadOneGame(MainMenu.username)==null || FilesController.loadOneGame(MainMenu.username).getBalls()==null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("No saved game found!");
+            alert.showAndWait();
+            return;
+        }
         GameMenu.username = username;
         GameMenu.isBeingLoaded = true;
+
         new GameMenu().start(stage);
     }
 
