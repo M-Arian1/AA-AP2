@@ -115,6 +115,7 @@ public class SettingsMenu extends Application {
     }
 
     public void checkChangeMuteGame(MouseEvent mouseEvent) {
+        Runn.mediaPlayer.setMute(!Runn.mediaPlayer.isMute());
         SettingsController.setMuted(!SettingsController.isMuted());
         muteLabel.setText(SettingsController.isMuted()?"ON":"OFF");
     }

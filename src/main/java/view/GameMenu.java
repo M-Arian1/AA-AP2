@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameMenu extends Application {
     public static GameController gameController ;
@@ -46,6 +48,10 @@ public class GameMenu extends Application {
     public static AnchorPane pausePane;
     @FXML
     public static Button pauseButton;
+    @FXML
+    public Button muteButton;
+    @FXML
+    public Label musicName;
     public static final int mainCircleRadius = 40;
     public static final int invisibleCircleRadius = 150;
 
@@ -67,6 +73,7 @@ public class GameMenu extends Application {
     public static Ball shootBall;
     public static boolean isBeingLoaded = false;
     public static Timeline timeTimeline;
+    public static MediaPlayer shootMedia = new MediaPlayer(new Media(new File("src/main/resources/media/shoot.mp3").toURI().toString()));
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -79,7 +86,9 @@ public class GameMenu extends Application {
         GameMenu.stage = stage;
         AnchorPane gamePane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/gameMenu.fxml").toExternalForm()));
-
+        musicName = (Label)((AnchorPane)gamePane.getChildren().get(1)).getChildren().get(7);
+        musicName.setMaxWidth(200);
+        musicName.setText("Music: "+Runn.mediaFileName);
         pausePane = (AnchorPane)gamePane.getChildren().get(1);
         pausePane.setVisible(false);
         pauseButton = (Button)gamePane.getChildren().get(0);
@@ -157,6 +166,17 @@ public class GameMenu extends Application {
                     numberOfBalls--;
                     remainedBallsLabel.setText("Remained Balls: "+numberOfBalls);
                     setBallsLabelColor();
+
+
+                    shootMedia.stop();
+                    shootMedia = new MediaPlayer(new Media(new File("src/main/resources/media/shoot.mp3").toURI().toString()));
+                    shootMedia.play();
+//                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
+//                            actionEvent -> shootMedia.stop()));
+//                    timeline.setCycleCount(1);
+//                    timeline.play();
+
+
                 } else if (keyName.equals(SettingsController.getIceButton())) {
                     iceModeTimeline(gamePane);
 
@@ -348,12 +368,14 @@ public class GameMenu extends Application {
         }
         if (pausePane.isVisible()){
             shootBall.setVisible(false);
+            shootBall.getBallText2().setVisible(false);
             windLabel.setVisible(false);
             progressBar.setVisible(false);
             mainCircle.setVisible(false);
             pausePane.requestFocus();
         } else {
             shootBall.setVisible(true);
+            shootBall.getBallText2().setVisible(true);
             windLabel.setVisible(true);
             progressBar.setVisible(true);
             mainCircle.setVisible(true);
@@ -390,13 +412,9 @@ public class GameMenu extends Application {
     }
 
     public void checkMuteMusic(MouseEvent mouseEvent) {
-//        //open and play a music file from the local directory
-//        String musicFile = "src/sample/Music/BackgroundMusic.mp3";
-//        Media sound = new Media(new File(musicFile).toURI().toString());
-//        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-//        mediaPlayer.setVolume(0);
-//        mediaPlayer.play();
-
+        Runn.mediaPlayer.setMute(!Runn.mediaPlayer.isMute());
+        SettingsController.setMuted(!SettingsController.isMuted());
+        muteButton.setText(!SettingsController.isMuted() ? "Music : OFF" : "Music : ON");
 
     }
 
@@ -409,6 +427,36 @@ public class GameMenu extends Application {
     }
 
     public void checkNextMusic(MouseEvent mouseEvent) {
+        File folder = new File("src/main/resources/media/");
+        File[] listOfFiles = folder.listFiles();
+
+        for(int i=0; i<listOfFiles.length; i++){
+            if(listOfFiles[i].getName().equals(Runn.mediaFileName)){
+                Runn.mediaPlayer.stop();
+                Runn.mediaFileName = listOfFiles[(i + 1) % listOfFiles.length].getName();
+                Runn.media = new Media(new File("src/main/resources/media/" + listOfFiles[(i + 1) % listOfFiles.length].getName()).toURI().toString());
+                Runn.mediaPlayer = new MediaPlayer(Runn.media);
+                Runn.mediaPlayer.setAutoPlay(true);
+                break;
+            }
+        }
+        musicName.setText("Music: "+Runn.mediaFileName);
+    }
+    public void checkPrevMusic(MouseEvent mouseEvent) {
+        File folder = new File("src/main/resources/media/");
+        File[] listOfFiles = folder.listFiles();
+
+        for(int i=0; i<listOfFiles.length; i++){
+            if(listOfFiles[i].getName().equals(Runn.mediaFileName)){
+                Runn.mediaPlayer.stop();
+                Runn.mediaFileName = listOfFiles[(i - 1 + listOfFiles.length) % listOfFiles.length].getName();
+                Runn.media = new Media(new File("src/main/resources/media/" + listOfFiles[(i - 1 + listOfFiles.length) % listOfFiles.length].getName()).toURI().toString());
+                Runn.mediaPlayer = new MediaPlayer(Runn.media);
+                Runn.mediaPlayer.setAutoPlay(true);
+                break;
+            }
+        }
+        musicName.setText("Music: "+Runn.mediaFileName);
     }
     public static void lostTheGame() throws IOException {
         for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
