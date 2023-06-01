@@ -41,7 +41,7 @@ public class LoginMenu extends Application{
         LoginMenu.stage = stage;
         AnchorPane loginPane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/loginMenu.fxml").toExternalForm()));
-
+        loginPane.setEffect(Runn.colorAdjust);
         Scene scene = new Scene(loginPane);
         stage.setScene(scene);
         stage.show();
@@ -71,7 +71,7 @@ public class LoginMenu extends Application{
     public void checkGuest(MouseEvent mouseEvent) throws Exception {
         MainMenu.gameController = new GameController("guest");
         MainMenu.username = "guest";
-        FilesController.setCurrentUser(FilesController.getUserByUsername(username.getText()));
+        FilesController.setCurrentUser(FilesController.getUserByUsername("guest"));
         new MainMenu().start(LoginMenu.stage);
     }
 

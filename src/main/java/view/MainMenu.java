@@ -2,6 +2,7 @@ package view;
 
 import controller.FilesController;
 import controller.GameController;
+import controller.SettingsController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,8 @@ import model.User;
 
 import java.net.URL;
 
+import static view.Runn.colorAdjust;
+
 public class MainMenu extends Application {
     public static GameController gameController;
     public static Stage stage;
@@ -23,11 +26,13 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FilesController.loadSettingsControllerOb();
+        Runn.colorAdjust.setSaturation(SettingsController.isBW() ? -1 : 0);
+        Runn.mediaPlayer.setMute(SettingsController.isMuted());
         username = FilesController.getCurrentUser();
         MainMenu.stage = stage;
         AnchorPane mainPane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/mainMenu.fxml").toExternalForm()));
-
+        mainPane.setEffect(colorAdjust);
 
         VBox vbox = new VBox();
         Avatar avatar = new Avatar(FilesController.getUsers().get(0).getAvatar(), 50);

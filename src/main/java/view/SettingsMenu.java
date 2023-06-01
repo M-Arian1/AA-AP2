@@ -31,14 +31,15 @@ public class SettingsMenu extends Application {
     @FXML
     public Label langLabel;
 
+    public AnchorPane settings;
 
     @Override
     public void start(Stage stage) throws Exception {
         loadSettings();
         SettingsMenu.stage = stage;
-        AnchorPane settings = FXMLLoader.load(
+        settings = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/settingsMenu.fxml").toExternalForm()));
-
+        settings.setEffect(Runn.colorAdjust);
 
 
         Scene scene = new Scene(settings);
@@ -46,13 +47,13 @@ public class SettingsMenu extends Application {
         stage.show();
     }
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         numberOfBalls.setText(SettingsController.getMaxNumberOfBalls()+"");
         mapNumber.setText(SettingsController.getMapNumber()+"");
         ShootButton.setText(SettingsController.getShootButton());
         IceButton.setText(SettingsController.getIceButton());
-        muteLabel.setText(SettingsController.isMuted()?"ON":"OFF");
-        BWLabel.setText(SettingsController.isBW()?"ON":"OFF");
+        muteLabel.setText(SettingsController.isMuted()?"OFF":"ON");
+        BWLabel.setText(SettingsController.isBW()?"OFF":"ON");
         langLabel.setText(SettingsController.isPersian()?"Persian":"English");
 
         ShootButton.textProperty().addListener((observable, oldText, newText)->{
@@ -117,12 +118,14 @@ public class SettingsMenu extends Application {
     public void checkChangeMuteGame(MouseEvent mouseEvent) {
         Runn.mediaPlayer.setMute(!Runn.mediaPlayer.isMute());
         SettingsController.setMuted(!SettingsController.isMuted());
-        muteLabel.setText(SettingsController.isMuted()?"ON":"OFF");
+        muteLabel.setText(SettingsController.isMuted()?"OFF":"ON");
     }
 
     public void checkChangeBW(MouseEvent mouseEvent) {
         SettingsController.setBW(!SettingsController.isBW());
-        BWLabel.setText(SettingsController.isBW()?"ON":"OFF");
+        Runn.colorAdjust.setSaturation(SettingsController.isBW()?-1:0);
+
+        BWLabel.setText(SettingsController.isBW()?"OFF":"ON");
     }
 
     public void checkLang(MouseEvent mouseEvent) {

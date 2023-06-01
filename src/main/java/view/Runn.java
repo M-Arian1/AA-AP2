@@ -3,11 +3,14 @@ package view;
 import controller.FilesController;
 import controller.GameController;
 import controller.RegisterController;
+import controller.SettingsController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
@@ -32,6 +35,7 @@ public class Runn extends Application{
     public static Media media;
     public static MediaPlayer mediaPlayer;
     public static String mediaFileName;
+    public static ColorAdjust colorAdjust = new ColorAdjust();
 
     public static void main(String[] args) throws Exception {
         launch();
@@ -48,13 +52,21 @@ public class Runn extends Application{
         stage.setScene(scene);
         stage.show();
 
+        stage.getIcons().add(new Image("file:src/main/resources/images/icon2.png"));
+
+
         mediaFileName = "1.mp3";
         File mediasFile = new File("src/main/resources/media/" + mediaFileName);
         media = new Media(mediasFile.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
 
-
+        MainMenu.username = FilesController.getCurrentUser();
+        FilesController.loadSettingsControllerOb();
+        colorAdjust.setContrast(0);
+        colorAdjust.setHue(0);
+        colorAdjust.setBrightness(0);
+        colorAdjust.setSaturation(SettingsController.isBW() ? -1 : 0);
 
         if(FilesController.getCurrentUser()!=null){
             MainMenu.gameController = new GameController(FilesController.getCurrentUser());

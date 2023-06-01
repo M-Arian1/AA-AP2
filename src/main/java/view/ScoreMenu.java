@@ -38,7 +38,7 @@ public class ScoreMenu extends Application {
         HighScore.stage = stage;
         AnchorPane highScore = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/scoreMenu.fxml").toExternalForm()));
-
+        highScore.setEffect(Runn.colorAdjust);
 
         Scene scene = new Scene(highScore);
         stage.setScene(scene);

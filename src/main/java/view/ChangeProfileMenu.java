@@ -38,7 +38,7 @@ public class ChangeProfileMenu extends Application {
         ChangeProfileMenu.stage = stage;
         AnchorPane profilePane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/changeProfile.fxml").toExternalForm()));
-
+        profilePane.setEffect(Runn.colorAdjust);
 
         HBox avatarPane = new HBox();
         for (Avatar avatar : AvatarFilesController.avatarHandler()) {

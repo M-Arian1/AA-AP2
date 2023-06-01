@@ -35,7 +35,7 @@
       </HBox>
       <HBox layoutX="141.0" layoutY="241.0" prefHeight="38.0" prefWidth="490.0" spacing="50.0">
          <children>
-            <Label prefHeight="38.0" prefWidth="97.0" text="Mute Game:" />
+            <Label prefHeight="38.0" prefWidth="97.0" text="Game Music:" />
             <Button mnemonicParsing="false" onMouseClicked="#checkChangeMuteGame" prefHeight="38.0" prefWidth="59.0" text="Change" />
             <Label fx:id="muteLabel" prefHeight="38.0" prefWidth="59.0" text="muted" />
          </children>
@@ -43,14 +43,14 @@
       <HBox layoutX="141.0" layoutY="300.0" prefHeight="38.0" prefWidth="490.0" spacing="50.0">
          <children>
             <Label prefHeight="38.0" prefWidth="97.0" text="B/W Game:" />
-            <Button mnemonicParsing="false" onMouseClicked="#checkChangeBW" prefHeight="38.0" prefWidth="59.0" text="change" />
+            <Button mnemonicParsing="false" onMouseClicked="#checkChangeBW" prefHeight="38.0" prefWidth="59.0" text="Change" />
             <Label fx:id="BWLabel" prefHeight="38.0" prefWidth="59.0" text="Normal" />
          </children>
       </HBox>
       <HBox layoutX="141.0" layoutY="360.0" prefHeight="38.0" prefWidth="490.0" spacing="50.0">
          <children>
             <Label prefHeight="38.0" prefWidth="97.0" text="Language:" />
-            <Button mnemonicParsing="false" onMouseClicked="#checkLang" prefHeight="38.0" prefWidth="59.0" text="change" />
+            <Button mnemonicParsing="false" onMouseClicked="#checkLang" prefHeight="38.0" prefWidth="59.0" text="Change" />
             <Label fx:id="langLabel" prefHeight="38.0" prefWidth="59.0" text="persian" />
          </children>
       </HBox>

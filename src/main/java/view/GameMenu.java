@@ -5,23 +5,21 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -34,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameMenu extends Application {
     public static GameController gameController ;
@@ -73,10 +70,11 @@ public class GameMenu extends Application {
     public static Ball shootBall;
     public static boolean isBeingLoaded = false;
     public static Timeline timeTimeline;
-    public static MediaPlayer shootMedia = new MediaPlayer(new Media(new File("src/main/resources/media/shoot.mp3").toURI().toString()));
+    public static MediaPlayer shootMedia = new MediaPlayer(new Media(new File("src/main/resources/effectsMusics/shoot.mp3").toURI().toString()));
 
     @Override
     public void start(Stage stage) throws Exception {
+
         numberOfBalls = SettingsController.getMaxNumberOfBalls();
         windSpeedRate = SettingsController.getWindSpeedRate();
         time = SettingsController.getTime();
@@ -86,6 +84,15 @@ public class GameMenu extends Application {
         GameMenu.stage = stage;
         AnchorPane gamePane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/gameMenu.fxml").toExternalForm()));
+        gamePane.setEffect(Runn.colorAdjust);
+//        ImageView background = new ImageView(new Image(GameMenu.class.getResource("/images/b1.jpg").toString(), 800 ,600, false, false));
+//        gamePane.getChildren().add(background);
+        BackgroundImage background = new BackgroundImage(new Image(GameMenu.class.getResource("/images/b5.jpg").toString(), 800 ,600, false, false),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+        gamePane.setBackground(new Background(background));
+
+
         musicName = (Label)((AnchorPane)gamePane.getChildren().get(1)).getChildren().get(7);
         musicName.setMaxWidth(200);
         musicName.setText("Music: "+Runn.mediaFileName);
@@ -169,8 +176,11 @@ public class GameMenu extends Application {
 
 
                     shootMedia.stop();
-                    shootMedia = new MediaPlayer(new Media(new File("src/main/resources/media/shoot.mp3").toURI().toString()));
+                    shootMedia = new MediaPlayer(new Media(new File("src/main/resources/effectsMusics/shoot.mp3").toURI().toString()));
                     shootMedia.play();
+                    ShootingTheBallAnimation iceAnimation = new ShootingTheBallAnimation(gamePane);
+                    iceAnimation.play();
+                    gameController.addAllAnimation(iceAnimation);
 //                    Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
 //                            actionEvent -> shootMedia.stop()));
 //                    timeline.setCycleCount(1);
@@ -268,6 +278,9 @@ public class GameMenu extends Application {
         iceModeCount = 0;
         progressBar.setProgress(0);
         iceMode(gamePane);
+        IceAnimation iceAnimation = new IceAnimation(gamePane);
+        iceAnimation.play();
+        gameController.addAllAnimation(iceAnimation);
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000*SettingsController.getIceModeTimer()),
                 actionEvent -> revertIceMode(gamePane)));
         timeline.setCycleCount(1);
@@ -289,6 +302,7 @@ public class GameMenu extends Application {
             }
         }
         angleSpeedInput = angleSpeedInput*2;
+
     }
 
     private void shootBall(AnchorPane gamePane, double X, double Y, int radius) {
@@ -533,7 +547,7 @@ public class GameMenu extends Application {
 
 
         gameController.getGamePane().setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2000),
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000),
                 actionEvent -> {
                     try {
                         wonTimeLine();

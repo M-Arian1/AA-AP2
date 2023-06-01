@@ -40,7 +40,7 @@ public class HighScore extends Application {
         HighScore.stage = stage;
         AnchorPane highScore = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/highScore.fxml").toExternalForm()));
-
+        highScore.setEffect(Runn.colorAdjust);
 
         ArrayList<User> userSorted = FilesController.getUsers();
 //        for (int i=0;i<userSorted.size();i++) {

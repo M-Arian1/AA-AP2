@@ -50,7 +50,7 @@ public class SignupMenu extends Application{
         SignupMenu.stage = stage;
         AnchorPane signupPane = FXMLLoader.load(
                 new URL(MainMenu.class.getResource("/fxml/signupMenu.fxml").toExternalForm()));
-
+        signupPane.setEffect(Runn.colorAdjust);
 
         HBox avatarPane = new HBox();
         for (Avatar avatar : AvatarFilesController.avatarHandler()) {
@@ -133,7 +133,7 @@ public class SignupMenu extends Application{
     public void checkGuest(MouseEvent mouseEvent) throws Exception {
         MainMenu.gameController = new GameController("guest");
         MainMenu.username = "guest";
-        FilesController.setCurrentUser(FilesController.getUserByUsername(username.getText()));
+        FilesController.setCurrentUser(FilesController.getUserByUsername("guest"));
         new MainMenu().start(SignupMenu.stage);
     }
 }
