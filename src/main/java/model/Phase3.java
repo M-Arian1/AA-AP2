@@ -18,7 +18,7 @@ public class Phase3 {
         for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
             if(!connectedBall.isPaused) {
                 connectedBall.setVisible(true);
-                connectedBall.getBallText().setVisible(true);
+                if(!connectedBall.getBallText().getText().equals("0")) connectedBall.getBallText().setVisible(true);
                 connectedBall.getBallStick().setVisible(true);
             }
         }
@@ -34,7 +34,7 @@ public class Phase3 {
         for (Ball connectedBall : GameMenu.gameController.getConnectedBalls()) {
             if(!connectedBall.isPaused) {
                 connectedBall.setVisible(false);
-                connectedBall.getBallText().setVisible(false);
+                if(!connectedBall.getBallText().getText().equals("0")) connectedBall.getBallText().setVisible(false);
                 connectedBall.getBallStick().setVisible(false);
             }
         }

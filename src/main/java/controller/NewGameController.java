@@ -75,7 +75,9 @@ public class NewGameController {
         GameMenu.phase = 0;
         GameMenu.angleSpeedInput = SettingsController.getAngleSpeedInput();
         GameMenu.isBeingLoaded = false;
-
+        Phase2.setIsPhase2Finished(true);
+        Phase3.setIsPhase3Finished(true);
+        Phase4.setIsPhase4Finished(true);
 
         GameMenu.numberOfBalls = SettingsController.getMaxNumberOfBalls();
         GameMenu.progressBar.setProgress(0);
@@ -141,6 +143,7 @@ public class NewGameController {
 
         ArrayList<Double> map = saveOb.getBalls();
         ArrayList<Integer> ballsnumbers = saveOb.getBallsNumbers();
+
 
         saveOb.getSettingsControllerOb().setStatic();
 

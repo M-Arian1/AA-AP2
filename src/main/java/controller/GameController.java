@@ -58,7 +58,10 @@ public class GameController {
         ArrayList<Ball> balls = new ArrayList<>();
         for (Double angle : angles) {
             Ball ball = new Ball(SettingsController.getBallRadius(),400+Math.cos(angle)*150,300+Math.sin(angle)*150, mapNumbers.get(angles.indexOf(angle)));
+            if(ball.getBallText().getText().equals("0"))
+                ball.getBallText().setVisible(false);
             balls.add(ball);
+
         }
         this.connectedBalls = balls;
     }
