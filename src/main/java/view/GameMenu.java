@@ -376,7 +376,7 @@ public class GameMenu extends Application {
                 ball.isPaused = false;
                 ball.setVisible(true);
                 ball.getBallStick().setVisible(true);
-                ball.getBallText().setVisible(true);
+                if(!ball.getBallText().getText().equals("0"))ball.getBallText().setVisible(true);
             }
         }
         if (pausePane.isVisible()){
