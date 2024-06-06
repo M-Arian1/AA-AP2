@@ -9,6 +9,7 @@ import model.DataBase;
 import model.Stick;
 import view.GameMenu;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -18,6 +19,7 @@ public class GameController {
     private AnchorPane gamePane;
     private boolean isLost = false;
     private ArrayList<Ball> connectedBalls = new ArrayList<>();
+    private ArrayList<ArrayList<Ball>> defaultConnectedBallsList = new ArrayList<>();
     private ArrayList<Animation> allAnimations = new ArrayList<>();
     public GameController(String username) {
         this.username = username;
@@ -82,8 +84,14 @@ public class GameController {
     public void setConnectedBalls(ArrayList<Ball> balls) {
         this.connectedBalls = balls;
     }
+    public void setDefaultConnectedBalls(int mapNumber) throws IOException {
+
+    }
+    public void addSetOfDefaultConnectedBalls(ArrayList<Ball> balls) {
+        defaultConnectedBallsList.add(balls);
+    }
     public void addConnectedBall(Ball ball) {
-        this.connectedBalls.add(ball);
+
     }
     public void removeConnectedBall(Ball ball){
         this.connectedBalls.remove(ball);
